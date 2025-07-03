@@ -1,0 +1,83 @@
+[
+  {
+    "id": "84938394",
+    "properties": {
+      "annualrevenue": "250000000",
+      "city": "Cambridge",
+      "country": "United States",
+      "createdate": "2015-12-22T18:21:04.162Z",
+      "domain": "hubspot.com",
+      "hs_lastmodifieddate": "2025-06-11T14:06:31.994Z",
+      "hs_object_id": "84938394",
+      "hubspot_owner_id": "11758940",
+      "industry": "COMPUTER_SOFTWARE",
+      "lifecyclestage": "other",
+      "name": "Hubspot, Inc.",
+      "numberofemployees": "5000",
+      "phone": "+1 888-482-7768",
+      "quickbooksclientid": null,
+      "state": "MA",
+      "type": "VENDOR",
+      "website": "support.hubspot.com",
+      "wrikeid": null,
+      "ziflowcompanyid": null
+    },
+    "createdAt": "2015-12-22T18:21:04.162Z",
+    "updatedAt": "2025-06-11T14:06:31.994Z",
+    "archived": false
+  },
+  {
+    "id": "120948951",
+    "properties": {
+      "annualrevenue": "1000000",
+      "city": "Tampa",
+      "country": "United States",
+      "createdate": "2016-04-11T22:04:05.091Z",
+      "domain": "nexcentri.com",
+      "hs_lastmodifieddate": "2025-04-25T14:31:27.227Z",
+      "hs_object_id": "120948951",
+      "hubspot_owner_id": "11758940",
+      "industry": "COMPUTER_SOFTWARE",
+      "lifecyclestage": "subscriber",
+      "name": "Nexcentri",
+      "numberofemployees": "10",
+      "phone": "1 (727) 452-4160",
+      "quickbooksclientid": null,
+      "state": "FL",
+      "type": null,
+      "website": "nexcentri.com",
+      "wrikeid": null,
+      "ziflowcompanyid": null
+    },
+    "createdAt": "2016-04-11T22:04:05.091Z",
+    "updatedAt": "2025-04-25T14:31:27.227Z",
+    "archived": false
+  },
+  {
+    "id": "120948956",
+    "properties": {
+      "annualrevenue": "1000000",
+      "city": "Lawrence",
+      "country": "United States",
+      "createdate": "2016-04-11T22:04:05.829Z",
+      "domain": "wongcomputing.com",
+      "hs_lastmodifieddate": "2025-02-12T04:19:17.819Z",
+      "hs_object_id": "120948956",
+      "hubspot_owner_id": "11758940",
+      "industry": "INFORMATION_TECHNOLOGY_AND_SERVICES",
+      "lifecyclestage": "subscriber",
+      "name": "Wongcomputing",
+      "numberofemployees": "10",
+      "phone": "7858567927",
+      "quickbooksclientid": null,
+      "state": "KS",
+      "type": null,
+      "website": "wongcomputing.com",
+      "wrikeid": null,
+      "ziflowcompanyid": null
+    },
+    "createdAt": "2016-04-11T22:04:05.829Z",
+    "updatedAt": "2025-02-12T04:19:17.819Z",
+    "archived": false
+  }
+]

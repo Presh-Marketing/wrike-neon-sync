@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>API Sync Monitor - Secure Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard-animations.css') }}">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .sync-card {
+            transition: all 0.3s ease;
+        }
+        .sync-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .log-entry {
+            transition: background-color 0.3s ease;
+        }
+        .log-entry:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+        @keyframes pulse-success {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .pulse-success {
+            animation: pulse-success 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <!-- Top Navigation Bar -->
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold gradient-bg text-transparent bg-clip-text">
+                        API Sync Monitor
+                    </h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- User Profile -->
+                    <div class="flex items-center space-x-3">
+                        {% if user.picture %}
+                        <img src="{{ user.picture }}" alt="Profile" class="w-8 h-8 rounded-full">
+                        {% endif %}
+                        <span class="text-sm font-medium text-gray-700">{{ user.name }}</span>
+                        <span class="text-xs text-gray-500">({{ user.email }})</span>
+                    </div>
+                    <a href="{{ url_for('logout') }}" class="text-sm text-red-600 hover:text-red-800 font-medium">
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Metrics Dashboard -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Active Jobs</p>
+                        <p class="text-3xl font-bold text-blue-600" id="metric-active-jobs">0</p>
+                    </div>
+                    <div class="p-3 bg-blue-100 rounded-full">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Completed Today</p>
+                        <p class="text-3xl font-bold text-green-600" id="metric-completed-today">0</p>
+                    </div>
+                    <div class="p-3 bg-green-100 rounded-full">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Failed Today</p>
+                        <p class="text-3xl font-bold text-red-600" id="metric-failed-today">0</p>
+                    </div>
+                    <div class="p-3 bg-red-100 rounded-full">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Records Synced</p>
+                        <p class="text-3xl font-bold text-purple-600" id="metric-total-records">0</p>
+                    </div>
+                    <div class="p-3 bg-purple-100 rounded-full">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Health -->
+        <div class="bg-white rounded-lg shadow p-6 mb-8">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">System Health</h2>
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-600">CPU Usage</span>
+                        <span class="text-sm font-bold" id="cpu-percent">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-blue-600 h-2 rounded-full" id="cpu-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-600">Memory Usage</span>
+                        <span class="text-sm font-bold" id="memory-percent">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-600 h-2 rounded-full" id="memory-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-600">Disk Usage</span>
+                        <span class="text-sm font-bold" id="disk-percent">0%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-purple-600 h-2 rounded-full" id="disk-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sync Scripts Grid -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Available Sync Scripts</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {% for key, script in sync_scripts.items() %}
+                <div class="sync-card bg-white rounded-lg shadow-md p-6 relative overflow-hidden" id="card-{{ key }}">
+                    <div class="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 bg-{{ script.color }}-100 rounded-full opacity-20"></div>
+                    <div class="relative">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900">{{ script.name }}</h3>
+                            <span class="px-2 py-1 text-xs font-medium bg-{{ script.color }}-100 text-{{ script.color }}-800 rounded-full">
+                                {{ script.category }}
+                            </span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-4">{{ script.description }}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-gray-500">~{{ script.estimated_duration }}s</span>
+                            <button onclick="startSync('{{ key }}')" 
+                                    class="sync-button px-4 py-2 bg-{{ script.color }}-600 text-white text-sm font-medium rounded hover:bg-{{ script.color }}-700 transition-colors duration-200"
+                                    id="btn-{{ key }}">
+                                Start Sync
+                            </button>
+                        </div>
+                        <div class="mt-4 hidden" id="progress-{{ key }}">
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-{{ script.color }}-600 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                            <p class="text-xs text-gray-600 mt-1">Processing...</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="bg-white rounded-lg shadow-md">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-bold text-gray-900">Activity Log</h2>
+                    <div class="flex items-center space-x-2">
+                        <select id="log-filter" class="text-sm border-gray-300 rounded-md">
+                            <option value="">All Levels</option>
+                            <option value="INFO">Info</option>
+                            <option value="SUCCESS">Success</option>
+                            <option value="WARNING">Warning</option>
+                            <option value="ERROR">Error</option>
+                        </select>
+                        <button onclick="clearLogs()" class="text-sm text-red-600 hover:text-red-800">
+                            Clear Logs
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <div id="log-container" class="space-y-2 max-h-96 overflow-y-auto">
+                    <!-- Logs will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard-utils.js') }}"></script>
+    <script>
+        // CSRF token handling
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        // EventSource for real-time updates
+        const eventSource = new EventSource('/events');
+        let activeJobs = {};
+
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            
+            if (data.type === 'init') {
+                // Initialize dashboard with current state
+                updateMetrics(data.metrics);
+                data.logs.forEach(log => addLogEntry(log));
+                Object.entries(data.status).forEach(([syncType, status]) => {
+                    updateSyncStatus(syncType, status);
+                });
+            } else if (data.type === 'log') {
+                addLogEntry(data.data);
+            } else if (data.type === 'status') {
+                updateSyncStatus(data.sync_type, data.data);
+            } else if (data.type === 'metrics') {
+                updateMetrics(data.data);
+            } else if (data.type === 'ping') {
+                updateMetrics(data.metrics);
+            }
+        };
+
+        eventSource.onerror = function(error) {
+            console.error('EventSource failed:', error);
+            showNotification('Connection lost. Please refresh the page.', 'error');
+        };
+
+        function startSync(syncType) {
+            const button = document.getElementById(`btn-${syncType}`);
+            button.disabled = true;
+            button.textContent = 'Starting...';
+            
+            fetch(`/api/sync/${syncType}`, {
+                method: 'GET',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    showNotification(data.error, 'error');
+                    button.disabled = false;
+                    button.textContent = 'Start Sync';
+                } else {
+                    showNotification(data.message, 'success');
+                    document.getElementById(`progress-${syncType}`).classList.remove('hidden');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Failed to start sync', 'error');
+                button.disabled = false;
+                button.textContent = 'Start Sync';
+            });
+        }
+
+        function updateSyncStatus(syncType, status) {
+            const button = document.getElementById(`btn-${syncType}`);
+            const progress = document.getElementById(`progress-${syncType}`);
+            const card = document.getElementById(`card-${syncType}`);
+            
+            if (status.status === 'running') {
+                button.disabled = true;
+                button.textContent = 'Running...';
+                progress.classList.remove('hidden');
+                card.classList.add('border-2', 'border-blue-400');
+                activeJobs[syncType] = status;
+            } else if (status.status === 'completed') {
+                button.disabled = false;
+                button.textContent = 'Start Sync';
+                progress.classList.add('hidden');
+                card.classList.remove('border-2', 'border-blue-400');
+                card.classList.add('pulse-success');
+                setTimeout(() => card.classList.remove('pulse-success'), 3000);
+                delete activeJobs[syncType];
+            } else if (status.status === 'failed') {
+                button.disabled = false;
+                button.textContent = 'Start Sync';
+                progress.classList.add('hidden');
+                card.classList.remove('border-2', 'border-blue-400');
+                card.classList.add('border-2', 'border-red-400');
+                setTimeout(() => card.classList.remove('border-2', 'border-red-400'), 3000);
+                delete activeJobs[syncType];
+            }
+        }
+
+        function updateMetrics(metrics) {
+            document.getElementById('metric-active-jobs').textContent = metrics.active_jobs || 0;
+            document.getElementById('metric-completed-today').textContent = metrics.completed_today || 0;
+            document.getElementById('metric-failed-today').textContent = metrics.failed_today || 0;
+            document.getElementById('metric-total-records').textContent = metrics.total_records_synced || 0;
+            
+            if (metrics.system) {
+                updateSystemMetrics(metrics.system);
+            }
+        }
+
+        function updateSystemMetrics(system) {
+            // CPU
+            document.getElementById('cpu-percent').textContent = `${system.cpu_percent.toFixed(1)}%`;
+            document.getElementById('cpu-bar').style.width = `${system.cpu_percent}%`;
+            
+            // Memory
+            document.getElementById('memory-percent').textContent = `${system.memory_percent.toFixed(1)}%`;
+            document.getElementById('memory-bar').style.width = `${system.memory_percent}%`;
+            
+            // Disk
+            document.getElementById('disk-percent').textContent = `${system.disk_percent.toFixed(1)}%`;
+            document.getElementById('disk-bar').style.width = `${system.disk_percent}%`;
+        }
+
+        function addLogEntry(log) {
+            const container = document.getElementById('log-container');
+            const filter = document.getElementById('log-filter').value;
+            
+            if (filter && log.level !== filter) {
+                return;
+            }
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry p-3 rounded-lg ${getLogClass(log.level)}`;
+            
+            const timestamp = new Date(log.timestamp).toLocaleTimeString();
+            const userInfo = log.user ? ` - ${log.user}` : '';
+            
+            logEntry.innerHTML = `
+                <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                        <span class="text-xs text-gray-500">${timestamp}${userInfo}</span>
+                        <span class="ml-2 px-2 py-1 text-xs font-medium rounded ${getLevelBadgeClass(log.level)}">
+                            ${log.level}
+                        </span>
+                        ${log.sync_type ? `<span class="ml-2 text-xs text-gray-600">[${log.sync_type}]</span>` : ''}
+                        <p class="mt-1 text-sm text-gray-800">${escapeHtml(log.message)}</p>
+                    </div>
+                </div>
+            `;
+            
+            container.insertBefore(logEntry, container.firstChild);
+            
+            // Keep only last 100 entries
+            while (container.children.length > 100) {
+                container.removeChild(container.lastChild);
+            }
+        }
+
+        function getLogClass(level) {
+            switch(level) {
+                case 'ERROR': return 'bg-red-50 border-l-4 border-red-400';
+                case 'WARNING': return 'bg-yellow-50 border-l-4 border-yellow-400';
+                case 'SUCCESS': return 'bg-green-50 border-l-4 border-green-400';
+                default: return 'bg-blue-50 border-l-4 border-blue-400';
+            }
+        }
+
+        function getLevelBadgeClass(level) {
+            switch(level) {
+                case 'ERROR': return 'bg-red-100 text-red-800';
+                case 'WARNING': return 'bg-yellow-100 text-yellow-800';
+                case 'SUCCESS': return 'bg-green-100 text-green-800';
+                default: return 'bg-blue-100 text-blue-800';
+            }
+        }
+
+        function clearLogs() {
+            if (confirm('Are you sure you want to clear all logs?')) {
+                fetch('/api/clear-logs', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('log-container').innerHTML = '';
+                    showNotification('Logs cleared successfully', 'success');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Failed to clear logs', 'error');
+                });
+            }
+        }
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg shadow-lg text-white ${
+                type === 'error' ? 'bg-red-600' : 'bg-green-600'
+            } transition-opacity duration-500`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Log filter
+        document.getElementById('log-filter').addEventListener('change', function() {
+            document.getElementById('log-container').innerHTML = '';
+            // Re-fetch logs with filter
+            fetch(`/api/logs?level=${this.value}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.logs.forEach(log => addLogEntry(log));
+                });
+        });
+    </script>
+</body>
+</html> 

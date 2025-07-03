@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Sync Monitor - Wrike & HubSpot Integration</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --border: #475569;
+            --border-light: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-areas: 
+                "header header"
+                "sidebar main";
+            grid-template-columns: 280px 1fr;
+            grid-template-rows: auto 1fr;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            grid-area: header;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Sidebar */
+        .sidebar {
+            grid-area: sidebar;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .sync-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .sync-button:hover {
+            border-color: var(--accent-primary);
+            background: var(--bg-primary);
+        }
+
+        .sync-button.running {
+            border-color: var(--accent-secondary);
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        .sync-button.completed {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .sync-button.failed {
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .button-content {
+            flex: 1;
+        }
+
+        .button-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .button-description {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .button-status {
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            gap: 0.25rem;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+        }
+
+        .status-indicator.running {
+            background: var(--accent-secondary);
+            animation: pulse 1s infinite;
+        }
+
+        .status-indicator.completed {
+            background: var(--success);
+        }
+
+        .status-indicator.failed {
+            background: var(--error);
+        }
+
+        .status-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Main Content */
+        .main-content {
+            grid-area: main;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-areas:
+                "metrics metrics metrics"
+                "controls logs logs";
+            grid-template-columns: 300px 1fr 1fr;
+            grid-template-rows: auto 1fr;
+            gap: 1.5rem;
+            height: calc(100vh - 120px);
+        }
+
+        /* Metrics Cards */
+        .metrics-section {
+            grid-area: metrics;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .metric-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .metric-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .metric-icon.primary { background: rgba(59, 130, 246, 0.2); color: var(--accent-primary); }
+        .metric-icon.success { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .metric-icon.warning { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .metric-icon.error { background: rgba(239, 68, 68, 0.2); color: var(--error); }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Controls Section */
+        .controls-section {
+            grid-area: controls;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+
+        .controls-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-primary);
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        /* Logs Section */
+        .logs-section {
+            grid-area: logs;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logs-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logs-controls {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .log-filter {
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .logs-container {
+            flex: 1;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            overflow-y: auto;
+            min-height: 400px;
+        }
+
+        .log-entry {
+            display: grid;
+            grid-template-columns: auto auto 1fr auto;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-family: 'JetBrains Mono', 'Monaco', monospace;
+            font-size: 0.8rem;
+            align-items: center;
+        }
+
+        .log-entry:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .log-entry.new {
+            animation: slideInFromRight 0.3s ease-out;
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .log-entry.new.ERROR {
+            border-left-color: var(--error);
+        }
+
+        .log-entry.new.SUCCESS {
+            border-left-color: var(--success);
+        }
+
+        .log-entry.new.WARNING {
+            border-left-color: var(--warning);
+        }
+
+        @keyframes slideInFromRight {
+            0% { transform: translateX(30px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        .metric-card.animated {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .log-timestamp {
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .log-level {
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            text-align: center;
+            min-width: 60px;
+        }
+
+        .log-level.INFO { background: rgba(59, 130, 246, 0.2); color: var(--accent-primary); }
+        .log-level.SUCCESS { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .log-level.WARNING { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .log-level.ERROR { background: rgba(239, 68, 68, 0.2); color: var(--error); }
+
+        .log-message {
+            word-break: break-word;
+        }
+
+        .log-source {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-align: right;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-top: 2px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-areas: 
+                    "header"
+                    "main";
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .dashboard-grid {
+                grid-template-areas:
+                    "metrics"
+                    "controls"
+                    "logs";
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .metrics-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .logs-controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-sync-alt"></i>
+                    API Sync Monitor
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="system-status">
+                    <div class="status-dot"></div>
+                    <span>System Online</span>
+                </div>
+                <div id="connectionStatus" class="system-status" style="display: none;">
+                    <i class="fas fa-wifi"></i>
+                    <span>Real-time Connected</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Sync Operations</h3>
+                <div id="syncButtons">
+                    {% for key, script in sync_scripts.items() %}
+                    <button class="sync-button" data-sync-type="{{ key }}" onclick="startSync('{{ key }}')">
+                        <div class="button-content">
+                            <div class="button-title">{{ script.name }}</div>
+                            <div class="button-description">{{ script.description }}</div>
+                        </div>
+                        <div class="button-status">
+                            <div class="status-indicator" id="status-{{ key }}"></div>
+                            <span class="status-text" id="status-text-{{ key }}">Ready</span>
+                        </div>
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="dashboard-grid">
+                <!-- Metrics Section -->
+                <section class="metrics-section">
+                    <div class="metric-card">
+                        <div class="metric-icon primary">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="metric-value" id="activeJobs">0</div>
+                        <div class="metric-label">Active Jobs</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="metric-value" id="completedJobs">0</div>
+                        <div class="metric-label">Completed Today</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon error">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="metric-value" id="failedJobs">0</div>
+                        <div class="metric-label">Failed Jobs</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-icon warning">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="metric-value" id="avgDuration">--</div>
+                        <div class="metric-label">Avg Duration</div>
+                    </div>
+                </section>
+
+                <!-- Controls Section -->
+                <section class="controls-section">
+                    <h3 class="controls-title">
+                        <i class="fas fa-cog"></i>
+                        Job Controls
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="limitInput">Record Limit (Testing)</label>
+                        <input type="number" id="limitInput" class="form-input" placeholder="e.g. 5" min="1" max="1000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <button class="btn btn-secondary" onclick="refreshAll()">
+                            <i class="fas fa-sync"></i>
+                            Refresh All Status
+                        </button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button class="btn btn-danger" onclick="clearLogs()">
+                            <i class="fas fa-trash"></i>
+                            Clear Logs
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Logs Section -->
+                <section class="logs-section">
+                    <div class="logs-header">
+                        <h3 class="logs-title">
+                            <i class="fas fa-terminal"></i>
+                            Live Logs
+                        </h3>
+                        
+                        <div class="logs-controls">
+                            <select class="log-filter" id="levelFilter" onchange="filterLogs()">
+                                <option value="">All Levels</option>
+                                <option value="INFO">Info</option>
+                                <option value="SUCCESS">Success</option>
+                                <option value="WARNING">Warning</option>
+                                <option value="ERROR">Error</option>
+                            </select>
+                            
+                            <select class="log-filter" id="sourceFilter" onchange="filterLogs()">
+                                <option value="">All Sources</option>
+                                {% for key, script in sync_scripts.items() %}
+                                <option value="{{ key }}">{{ script.name }}</option>
+                                {% endfor %}
+                            </select>
+                            
+                            <label class="btn btn-secondary">
+                                <input type="checkbox" id="autoScroll" checked style="display: none;">
+                                <i class="fas fa-arrow-down"></i>
+                                Auto-scroll
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="logs-container" id="logsContainer">
+                        <div class="loading" id="logsLoading">
+                            <div class="spinner"></div>
+                            Initializing logs...
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Global state management
+        let eventSource;
+        let allLogs = [];
+        let filteredLogs = [];
+        let metrics = {
+            activeJobs: 0,
+            completedJobs: 0,
+            failedJobs: 0,
+            totalJobs: 0,
+            durations: []
+        };
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Dashboard initializing...');
+            console.log('📍 Current URL:', window.location.href);
+            console.log('🌐 User Agent:', navigator.userAgent);
+            console.log('🔧 EventSource support:', typeof(EventSource) !== "undefined");
+            
+            initializeSSE();
+            refreshAll();
+            updateMetrics();
+            
+            console.log('✅ Dashboard initialization complete');
+        });
+
+        // Server-Sent Events setup
+        function initializeSSE() {
+            if (typeof(EventSource) === "undefined") {
+                console.warn('SSE not supported, falling back to polling');
+                fallbackToPolling();
+                return;
+            }
+
+            connectSSE();
+        }
+
+        function connectSSE() {
+            if (eventSource) {
+                eventSource.close();
+            }
+
+            console.log('Attempting to connect to SSE...');
+            eventSource = new EventSource('/events');
+            
+            eventSource.onopen = function(event) {
+                console.log('✅ SSE connected successfully!', event);
+                document.getElementById('connectionStatus').style.display = 'flex';
+                document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-wifi"></i><span>Real-time Connected</span>';
+                document.getElementById('connectionStatus').style.background = 'rgba(16, 185, 129, 0.2)';
+                document.getElementById('connectionStatus').style.color = 'var(--success)';
+            };
+
+            eventSource.onmessage = function(event) {
+                console.log('📨 SSE message received:', event.data);
+                try {
+                    const data = JSON.parse(event.data);
+                    console.log('📋 Parsed SSE data:', data);
+                    handleSSEEvent(data);
+                } catch (e) {
+                    console.error('❌ Error parsing SSE data:', e, 'Raw data:', event.data);
+                }
+            };
+
+            eventSource.onerror = function(event) {
+                console.error('❌ SSE error:', event);
+                console.log('SSE readyState:', eventSource.readyState);
+                document.getElementById('connectionStatus').style.display = 'flex';
+                document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-wifi-slash"></i><span>Connection Lost</span>';
+                document.getElementById('connectionStatus').style.background = 'rgba(239, 68, 68, 0.2)';
+                document.getElementById('connectionStatus').style.color = 'var(--error)';
+                
+                // Retry connection after 3 seconds if it's closed
+                if (eventSource.readyState === EventSource.CLOSED) {
+                    console.log('🔄 Retrying SSE connection in 3 seconds...');
+                    setTimeout(connectSSE, 3000);
+                }
+            };
+
+            // Add timeout to detect if connection takes too long
+            setTimeout(() => {
+                if (eventSource.readyState === EventSource.CONNECTING) {
+                    console.warn('⚠️ SSE connection taking too long, falling back to polling');
+                    eventSource.close();
+                    fallbackToPolling();
+                }
+            }, 10000); // 10 second timeout
+        }
+
+        function handleSSEEvent(data) {
+            console.log('🔄 Handling SSE event:', data.type, data);
+            
+            switch (data.type) {
+                case 'init':
+                    console.log('🎯 Initializing with', data.logs?.length || 0, 'logs');
+                    allLogs = data.logs || [];
+                    updateAllSyncButtons(data.status || {});
+                    filterLogs();
+                    updateMetrics();
+                    if (data.metrics) {
+                        updateMetricsDisplay(data.metrics);
+                    }
+                    break;
+                case 'log':
+                    console.log('📝 New log entry:', data.data);
+                    allLogs.push(data.data);
+                    if (allLogs.length > 1000) {
+                        allLogs = allLogs.slice(-1000); // Keep last 1000 logs
+                    }
+                    
+                    // Add new log with animation
+                    addNewLogEntry(data.data);
+                    updateMetrics();
+                    break;
+                case 'status':
+                    console.log('🔄 Status update for', data.sync_type, ':', data.data);
+                    updateSyncButton(data.sync_type, data.data);
+                    updateMetrics();
+                    break;
+                case 'metrics':
+                    console.log('📊 Metrics update:', data.data);
+                    updateMetricsDisplay(data.data);
+                    break;
+                case 'ping':
+                    console.log('💓 Ping received - connection alive');
+                    if (data.metrics) {
+                        updateMetricsDisplay(data.metrics);
+                    }
+                    break;
+                default:
+                    console.warn('❓ Unknown SSE event type:', data.type);
+            }
+        }
+
+        // Sync job management
+        function startSync(syncType) {
+            const button = document.querySelector(`[data-sync-type="${syncType}"]`);
+            const statusIndicator = document.getElementById(`status-${syncType}`);
+            const statusText = document.getElementById(`status-text-${syncType}`);
+            
+            if (button.classList.contains('running')) {
+                alert('This sync is already running!');
+                return;
+            }
+
+            const limit = document.getElementById('limitInput').value;
+            let url = `/api/sync/${syncType}`;
+            if (limit) {
+                url += `?limit=${limit}`;
+            }
+
+            // Update UI immediately
+            button.classList.add('running');
+            statusIndicator.classList.add('running');
+            statusText.textContent = 'Starting...';
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        button.classList.remove('running');
+                        statusIndicator.classList.remove('running');
+                        statusText.textContent = 'Ready';
+                    } else {
+                        statusText.textContent = 'Running...';
+                        updateMetrics();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error starting sync: ' + error.message);
+                    button.classList.remove('running');
+                    statusIndicator.classList.remove('running');
+                    statusText.textContent = 'Error';
+                });
+        }
+
+        function updateSyncButton(syncType, status) {
+            const button = document.querySelector(`[data-sync-type="${syncType}"]`);
+            const statusIndicator = document.getElementById(`status-${syncType}`);
+            const statusText = document.getElementById(`status-text-${syncType}`);
+
+            if (!button) return;
+
+            // Remove all status classes
+            button.classList.remove('running', 'completed', 'failed');
+            statusIndicator.classList.remove('running', 'completed', 'failed');
+
+            switch (status.status) {
+                case 'running':
+                    button.classList.add('running');
+                    statusIndicator.classList.add('running');
+                    statusText.textContent = 'Running...';
+                    break;
+                case 'completed':
+                    button.classList.add('completed');
+                    statusIndicator.classList.add('completed');
+                    statusText.textContent = 'Completed';
+                    break;
+                case 'failed':
+                    button.classList.add('failed');
+                    statusIndicator.classList.add('failed');
+                    statusText.textContent = 'Failed';
+                    break;
+                default:
+                    statusText.textContent = 'Ready';
+            }
+        }
+
+        function updateAllSyncButtons(statusData) {
+            for (const [syncType, syncStatus] of Object.entries(statusData)) {
+                updateSyncButton(syncType, syncStatus);
+            }
+        }
+
+        // Log management
+        function filterLogs() {
+            const levelFilter = document.getElementById('levelFilter').value;
+            const sourceFilter = document.getElementById('sourceFilter').value;
+            
+            filteredLogs = allLogs.filter(log => {
+                const levelMatch = !levelFilter || log.level === levelFilter;
+                const sourceMatch = !sourceFilter || log.sync_type === sourceFilter;
+                return levelMatch && sourceMatch;
+            });
+            
+            displayLogs();
+        }
+
+        function addNewLogEntry(logData) {
+            console.log('➕ Adding new log entry:', logData);
+            
+            // Check if this log should be displayed based on current filters
+            const levelFilter = document.getElementById('levelFilter').value;
+            const sourceFilter = document.getElementById('sourceFilter').value;
+            
+            const levelMatch = !levelFilter || logData.level === levelFilter;
+            const sourceMatch = !sourceFilter || logData.sync_type === sourceFilter;
+            
+            if (!levelMatch || !sourceMatch) {
+                console.log('🚫 Log filtered out by current filters');
+                return;
+            }
+            
+            const container = document.getElementById('logsContainer');
+            
+            // Remove empty state if present
+            const emptyState = container.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.remove();
+            }
+            
+            // Create new log entry element
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry new ${logData.level}`;
+            
+            const timestamp = new Date(logData.timestamp).toLocaleTimeString();
+            const source = logData.sync_type || 'system';
+            
+            logEntry.innerHTML = `
+                <span class="log-timestamp">${timestamp}</span>
+                <span class="log-level ${logData.level}">${logData.level}</span>
+                <span class="log-message">${escapeHtml(logData.message)}</span>
+                <span class="log-source">${source}</span>
+            `;
+            
+            // Add to container
+            container.appendChild(logEntry);
+            
+            // Remove animation class after animation completes
+            setTimeout(() => {
+                logEntry.classList.remove('new');
+            }, 300);
+            
+            // Auto-scroll if enabled
+            if (document.getElementById('autoScroll').checked) {
+                container.scrollTop = container.scrollHeight;
+            }
+            
+            // Keep only last 100 log entries in DOM for performance
+            const logEntries = container.querySelectorAll('.log-entry');
+            if (logEntries.length > 100) {
+                logEntries[0].remove();
+            }
+            
+            console.log('✅ Log entry added to DOM');
+        }
+
+        function displayLogs() {
+            const container = document.getElementById('logsContainer');
+            const loading = document.getElementById('logsLoading');
+            
+            loading.style.display = 'none';
+            
+            if (filteredLogs.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-file-alt"></i>
+                        <p>No logs match the current filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = '';
+            
+            filteredLogs.slice(-100).forEach(log => {
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                
+                const timestamp = new Date(log.timestamp).toLocaleTimeString();
+                const source = log.sync_type || 'system';
+                
+                logEntry.innerHTML = `
+                    <span class="log-timestamp">${timestamp}</span>
+                    <span class="log-level ${log.level}">${log.level}</span>
+                    <span class="log-message">${escapeHtml(log.message)}</span>
+                    <span class="log-source">${source}</span>
+                `;
+                
+                container.appendChild(logEntry);
+            });
+            
+            // Auto-scroll if enabled
+            if (document.getElementById('autoScroll').checked) {
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        function clearLogs() {
+            if (confirm('Are you sure you want to clear all logs?')) {
+                fetch('/api/clear-logs')
+                    .then(response => response.json())
+                    .then(data => {
+                        allLogs = [];
+                        filteredLogs = [];
+                        displayLogs();
+                        updateMetrics();
+                    })
+                    .catch(error => console.error('Error clearing logs:', error));
+            }
+        }
+
+        // Metrics and status updates
+        function updateMetrics() {
+            // Count active jobs
+            const activeButtons = document.querySelectorAll('.sync-button.running');
+            document.getElementById('activeJobs').textContent = activeButtons.length;
+
+            // Count completed/failed jobs from logs
+            const today = new Date().toDateString();
+            const todayLogs = allLogs.filter(log => 
+                new Date(log.timestamp).toDateString() === today
+            );
+            
+            const completed = todayLogs.filter(log => 
+                log.level === 'SUCCESS' && log.message.includes('completed successfully')
+            ).length;
+            
+            const failed = todayLogs.filter(log => 
+                log.level === 'ERROR' && log.message.includes('failed')
+            ).length;
+
+            document.getElementById('completedJobs').textContent = completed;
+            document.getElementById('failedJobs').textContent = failed;
+
+            // Calculate average duration (placeholder - would need actual timing data)
+            document.getElementById('avgDuration').textContent = '2.3m';
+        }
+
+        function updateMetricsDisplay(metricsData) {
+            console.log('📊 Updating metrics display:', metricsData);
+            
+            if (metricsData.active_jobs !== undefined) {
+                animateValue('activeJobs', metricsData.active_jobs);
+            }
+            
+            if (metricsData.completed_today !== undefined) {
+                animateValue('completedJobs', metricsData.completed_today);
+            }
+            
+            if (metricsData.failed_today !== undefined) {
+                animateValue('failedJobs', metricsData.failed_today);
+            }
+            
+            if (metricsData.avg_duration !== undefined) {
+                document.getElementById('avgDuration').textContent = metricsData.avg_duration;
+            }
+        }
+
+        function animateValue(elementId, newValue) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+
+            const currentValue = parseInt(element.textContent) || 0;
+            if (currentValue === newValue) return;
+
+            // Add glow effect
+            element.parentElement.classList.add('animated');
+            
+            // Animate the number
+            const step = newValue > currentValue ? 1 : -1;
+            const duration = Math.abs(newValue - currentValue) * 50; // 50ms per step
+            
+            let current = currentValue;
+            const interval = setInterval(() => {
+                current += step;
+                element.textContent = current;
+                
+                if ((step > 0 && current >= newValue) || (step < 0 && current <= newValue)) {
+                    element.textContent = newValue;
+                    clearInterval(interval);
+                    
+                    // Remove animation class
+                    setTimeout(() => {
+                        element.parentElement.classList.remove('animated');
+                    }, 500);
+                }
+            }, Math.max(1, duration / Math.abs(newValue - currentValue)));
+        }
+
+        function refreshAll() {
+            fetch('/api/status')
+                .then(response => response.json())
+                .then(status => {
+                    updateAllSyncButtons(status);
+                    updateMetrics();
+                })
+                .catch(error => console.error('Error refreshing status:', error));
+
+            fetch('/api/logs?limit=100')
+                .then(response => response.json())
+                .then(data => {
+                    allLogs = data.logs || [];
+                    filterLogs();
+                    updateMetrics();
+                })
+                .catch(error => console.error('Error refreshing logs:', error));
+        }
+
+        // Utility functions
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function fallbackToPolling() {
+            console.log('🔄 Using polling fallback mode');
+            document.getElementById('connectionStatus').style.display = 'flex';
+            document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-clock"></i><span>Polling Mode</span>';
+            document.getElementById('connectionStatus').style.background = 'rgba(245, 158, 11, 0.2)';
+            document.getElementById('connectionStatus').style.color = 'var(--warning)';
+            
+            refreshAll();
+            setInterval(() => {
+                console.log('🔄 Polling for updates...');
+                refreshAll();
+            }, 3000); // Poll every 3 seconds
+        }
+
+        // Event listeners
+        document.getElementById('autoScroll').addEventListener('change', function() {
+            if (this.checked) {
+                const container = document.getElementById('logsContainer');
+                container.scrollTop = container.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html> 

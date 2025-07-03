@@ -1,0 +1,2439 @@
+{
+  "total_properties": 399,
+  "by_type": {
+    "number": 157,
+    "enumeration": 53,
+    "string": 53,
+    "datetime": 117,
+    "bool": 14,
+    "object_coordinates": 2,
+    "date": 3
+  },
+  "by_group": {
+    "dealinformation": 128,
+    "deal_roles": 4,
+    "accounting": 30,
+    "program": 3,
+    "integration": 14,
+    "deal_registration_information": 2,
+    "revenue": 13,
+    "analyticsinformation": 15,
+    "deal_activity": 84,
+    "predictive_deal_score_feature_properties": 6,
+    "dealscripted": 3,
+    "hubspotmetrics": 1,
+    "dealstages": 90,
+    "ip__sync_extension__sync_extension": 2,
+    "recurring_revenue_information": 4
+  },
+  "detailed_properties": {
+    "number": [
+      {
+        "name": "amount",
+        "label": "Amount",
+        "description": "The total amount of the deal",
+        "group": "dealinformation"
+      },
+      {
+        "name": "amount_in_home_currency",
+        "label": "Amount in company currency",
+        "description": "The amount of the deal, using the exchange rate, in your company's currency",
+        "group": "dealinformation"
+      },
+      {
+        "name": "budget_gross_profit",
+        "label": "Budget: Gross Profit",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "commission_exec_up_sell",
+        "label": "Commission: Exec - Up Sell",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "commission_net_new",
+        "label": "Commission: Net New",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "commission_net_new_exec",
+        "label": "Commission: Net New - Exec",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "commission_team_up_sell",
+        "label": "Commission: Team - Up Sell",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "commission_up_sell_exec",
+        "label": "Commission: Up Sell - Exec",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "commission_up_sell_team",
+        "label": "Commission: Up Sell - Team",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "companyid_hs_sync",
+        "label": "HS Company ID",
+        "description": "",
+        "group": "integration"
+      },
+      {
+        "name": "cost_hard_cost",
+        "label": "Budget: Hard Cost",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "cost_labor",
+        "label": "Cost: Labor",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "days_to_close",
+        "label": "Days to close",
+        "description": "The number of days the deal took to close",
+        "group": "dealinformation"
+      },
+      {
+        "name": "forecast_percentage",
+        "label": "Forecast Percentage",
+        "description": "",
+        "group": "revenue"
+      },
+      {
+        "name": "forecast_revenue",
+        "label": "Forecast: Gross Profit",
+        "description": "",
+        "group": "revenue"
+      },
+      {
+        "name": "gross_profit",
+        "label": "Gross Profit",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "hard_cost_contractors",
+        "label": "Project: Hard Cost - Contractors",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "hs_acv",
+        "label": "Annual contract value",
+        "description": "The annual contract value (ACV) of this deal.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_arr",
+        "label": "Annual recurring revenue",
+        "description": "The annual recurring revenue (ARR) of this deal.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_average_call_duration",
+        "label": "Average call duration",
+        "description": "The average call duration of calls associated to the deal",
+        "group": "predictive_deal_score_feature_properties"
+      },
+      {
+        "name": "hs_closed_amount",
+        "label": "Closed Deal Amount",
+        "description": "Returns the amount if the deal is closed. Else, returns 0.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_closed_amount_in_home_currency",
+        "label": "Closed deal amount in home currency",
+        "description": "The amount in home currency that was closed for deals that were won.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_closed_deal_close_date",
+        "label": "Closed Deal Close Date",
+        "description": "Close date populated only if this deal is closed and valid",
+        "group": "dealscripted"
+      },
+      {
+        "name": "hs_closed_deal_create_date",
+        "label": "Closed Deal Create Date",
+        "description": "Create date populated only if this deal is closed",
+        "group": "dealscripted"
+      },
+      {
+        "name": "hs_closed_won_count",
+        "label": "Closed won count",
+        "description": "This property is 1 if the deal is closed won, otherwise 0.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_created_by_user_id",
+        "label": "Created by user ID",
+        "description": "The user who created this record. This value is set automatically by HubSpot.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_days_to_close_raw",
+        "label": "Days to close (without rounding)",
+        "description": "The number of days the deal took to close, without rounding",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_deal_registration_mrr",
+        "label": "HubSpot Shared Deal MRR",
+        "description": "MRR of the quote purchased for this Shared Deal.",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_deal_score",
+        "label": "Deal Score",
+        "description": "The predictive deal score calculated by Hubspot AI to score the deal health",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_deal_stage_probability",
+        "label": "Deal probability",
+        "description": "The probability a deal will close. This defaults to the deal stage probability setting.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_deal_stage_probability_shadow",
+        "label": "Deal stage probability shadow",
+        "description": "Fall back property for calculating the deal stage when no customer override exist.  Probability between 0 and 1 of deal stage. Defaults to 0 for unknown deal stages.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_duration",
+        "label": "Duration",
+        "description": "The duration between the create date and close date",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_exchange_rate",
+        "label": "Exchange rate",
+        "description": "This is the exchange rate used to convert the deal amount into your company currency.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_forecast_amount",
+        "label": "Forecast amount",
+        "description": "The custom forecasted deal value calculated by multiplying the forecast probability and deal amount in your company\u2019s currency.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_forecast_probability",
+        "label": "Forecast probability",
+        "description": "The custom percent probability a deal will close.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_is_closed_count",
+        "label": "Is Closed (numeric)",
+        "description": "This property is 1 if the deal is closed (\"Closed Won\" or \"Closed Lost\"), otherwise 0",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_is_open_count",
+        "label": "Is Open (numeric)",
+        "description": "This property is 1 if the deal is not closed won or closed lost, otherwise 0",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_latest_approval_status_approval_id",
+        "label": "Latest Approval Status Approval ID",
+        "description": "The ID of the approval object containing the latest approval status.",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_likelihood_to_close",
+        "label": "Likelihood to close by the close date",
+        "description": "Hubspot predicted likelihood between 0 and 1 of the deal to close by the close date.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_manual_campaign_ids",
+        "label": "Manual campaign ids",
+        "description": "The campaign object ids of deals manually associated to campaigns",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_mrr",
+        "label": "Monthly recurring revenue",
+        "description": "The monthly recurring revenue (MRR) of this deal.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_net_pipeline_impact",
+        "label": "Net Pipeline Impact",
+        "description": "This property is intended for measuring pipeline impact in the Deal Pipeline Waterfall report in Sales Analytics. It is dynamically calculated and utilized as a metric by the HistoricalReportingService. ",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_next_meeting_id",
+        "label": "Next Meeting ID",
+        "description": "",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_num_associated_active_deal_registrations",
+        "label": "Number of Active Deal Registrations",
+        "description": "The number of active deal registrations associated with this deal. This property is set automatically by HubSpot.",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_num_associated_deal_registrations",
+        "label": "Number of Deal Registrations",
+        "description": "The number of deal registrations associated with this deal. This property is set automatically by HubSpot.",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_num_associated_deal_splits",
+        "label": "Number of Deal Splits",
+        "description": "The number of deal splits associated with this deal. This property is set automatically by HubSpot.",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_num_of_associated_line_items",
+        "label": "Number of Associated Line Items",
+        "description": "The number of line items associated with this deal",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_num_target_accounts",
+        "label": "Number of target accounts",
+        "description": "The number of target account companies associated with this deal. This property is set automatically by HubSpot.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_number_of_call_engagements",
+        "label": "Number of call engagements",
+        "description": "The number of call engagements associated to the deal",
+        "group": "predictive_deal_score_feature_properties"
+      },
+      {
+        "name": "hs_number_of_inbound_calls",
+        "label": "Number of inbound calls",
+        "description": "The number of inbound calls associated to the deal",
+        "group": "predictive_deal_score_feature_properties"
+      },
+      {
+        "name": "hs_number_of_outbound_calls",
+        "label": "Number of outbound calls",
+        "description": "The number of outbound calls associated to the deal",
+        "group": "predictive_deal_score_feature_properties"
+      },
+      {
+        "name": "hs_number_of_overdue_tasks",
+        "label": "Number of overdue tasks",
+        "description": "The number of overdue tasks associated to the deal",
+        "group": "predictive_deal_score_feature_properties"
+      },
+      {
+        "name": "hs_number_of_scheduled_meetings",
+        "label": "Number of scheduled meetings",
+        "description": "The number of scheduled meetings associated to the deal",
+        "group": "predictive_deal_score_feature_properties"
+      },
+      {
+        "name": "hs_object_id",
+        "label": "Record ID",
+        "description": "The unique ID for this record. This value is set automatically by HubSpot.",
+        "group": "integration"
+      },
+      {
+        "name": "hs_object_source_user_id",
+        "label": "Record creation source user ID",
+        "description": "Raw internal userId present in the RequestMeta when this record was created.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_open_amount_in_home_currency",
+        "label": "Open amount in home currency",
+        "description": "The amount of the open deal, using the exchange rate, in your home currency",
+        "group": "hubspotmetrics"
+      },
+      {
+        "name": "hs_open_deal_create_date",
+        "label": "Open deal create date",
+        "description": "Create date populated only if this deal is open",
+        "group": "dealscripted"
+      },
+      {
+        "name": "hs_pinned_engagement_id",
+        "label": "Pinned Engagement ID",
+        "description": "The object ID of the current pinned engagement. This will only be shown if there is already an association to the engagement.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_predicted_amount",
+        "label": "The predicted deal amount",
+        "description": "Returns the multiplication of the deal amount times the predicted likelihood of the deal to close by the close date.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_predicted_amount_in_home_currency",
+        "label": "The predicted deal amount in your company's currency",
+        "description": "Returns the multiplication of the deal amount in your company's currency times the predicted likelihood of the deal to close by the close date.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_primary_associated_company",
+        "label": "Primary Associated Company",
+        "description": "Object Id of the Primary Associated Company.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_projected_amount",
+        "label": "Weighted amount",
+        "description": "Returns the multiplication of the amount times the probability of the deal closing.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_projected_amount_in_home_currency",
+        "label": "Weighted amount in company currency",
+        "description": "The deal\u2019s amount in home currency multiplied by its probability of closing, which is determined based on the deal\u2019s stage and the probability that was assigned to it in deal pipeline settings.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_source_object_id",
+        "label": "Source Object ID",
+        "description": "The ID of the object from which the data was migrated. This is set automatically during portal data migration.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_tcv",
+        "label": "Total contract value",
+        "description": "The total contract value (TCV) of this deal.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_time_in_14370189",
+        "label": "Time in 'Prospect (Program Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Prospect' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_14370190",
+        "label": "Time in 'Stalled (Program Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Stalled' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_14370191",
+        "label": "Time in 'Intro Call (Program Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Intro Call' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_14370194",
+        "label": "Time in 'Opt In (Program Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Opt In' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_14370195",
+        "label": "Time in 'Opt Out (Program Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Opt Out' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_14373537",
+        "label": "Time in 'Decision Pending (Program Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Decision Pending' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_19117067",
+        "label": "Time in 'Renewal (Opportunity Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Renewal' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_1fff24f0_b582_439c_89fa_2d59ca9e4bcf_1161023899",
+        "label": "Time in 'Proposal Sent (Opportunity Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Proposal Sent' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_2052484",
+        "label": "Time in 'Prospecting (Opportunity Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Prospecting' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_2256968",
+        "label": "Time in 'WON - Project Set Up (Opportunity Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'WON - Project Set Up' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_30c19921_8a11_49b3_865c_a0df80c4ddb4_1939785175",
+        "label": "Time in 'Stalled (Opportunity Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Stalled' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_96534d0f_9e21_4f53_adbd_40203f25a770_1944545824",
+        "label": "Time in 'Solution Design (Opportunity Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Solution Design' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_appointmentscheduled",
+        "label": "Time in 'Appointment Scheduled (Sales Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Appointment Scheduled' stage, 'Sales Pipeline' pipeline",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_time_in_closedlost",
+        "label": "Time in 'LOST (Opportunity Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'LOST' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_closedwon",
+        "label": "Time in 'WON (Opportunity Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'WON' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_contractsent",
+        "label": "Time in 'Verbal Commit (Opportunity Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Verbal Commit' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_deal_registration_businessconsiderations_174835023",
+        "label": "Time in 'Business Considerations (HubSpot Shared Selling Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Business Considerations' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_deal_registration_closed_lost",
+        "label": "Time in 'Closed Lost (HubSpot Shared Selling Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Closed Lost' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_deal_registration_closed_won",
+        "label": "Time in 'Closed Won (HubSpot Shared Selling Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Closed Won' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_deal_registration_discovery",
+        "label": "Time in 'Discovery (HubSpot Shared Selling Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Discovery' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_deal_registration_outforsignature_738869205",
+        "label": "Time in 'Out for Signature (HubSpot Shared Selling Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Out for Signature' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_deal_registration_pricingandterms_485324537",
+        "label": "Time in 'Pricing and Terms (HubSpot Shared Selling Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Pricing and Terms' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_deal_registration_solutiondemo_860249051",
+        "label": "Time in 'Solution Demo (HubSpot Shared Selling Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Solution Demo' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_decisionmakerboughtin",
+        "label": "Time in 'Decision Maker Bought-In (Opportunity Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Decision Maker Bought-In' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_time_in_presentationscheduled",
+        "label": "Time in 'Presentation Scheduled (Sales Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Presentation Scheduled' stage, 'Sales Pipeline' pipeline",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_time_in_qualifiedtobuy",
+        "label": "Time in 'Qualified To Buy (Sales Pipeline)'",
+        "description": "The total time in seconds spent by the deal in the 'Qualified To Buy' stage, 'Sales Pipeline' pipeline",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_updated_by_user_id",
+        "label": "Updated by user ID",
+        "description": "The user who last updated this record. This value is set automatically by HubSpot.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_14370189",
+        "label": "Cumulative time in \"Prospect (Program Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Prospect' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_14370190",
+        "label": "Cumulative time in \"Stalled (Program Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Stalled' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_14370191",
+        "label": "Cumulative time in \"Intro Call (Program Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Intro Call' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_14370194",
+        "label": "Cumulative time in \"Opt In (Program Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Opt In' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_14370195",
+        "label": "Cumulative time in \"Opt Out (Program Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Opt Out' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_14373537",
+        "label": "Cumulative time in \"Decision Pending (Program Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Decision Pending' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_19117067",
+        "label": "Cumulative time in \"Renewal (Opportunity Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Renewal' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_1fff24f0_b582_439c_89fa_2d59ca9e4bcf_1161023899",
+        "label": "Cumulative time in \"Proposal Sent (Opportunity Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Proposal Sent' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_2052484",
+        "label": "Cumulative time in \"Prospecting (Opportunity Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Prospecting' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_2256968",
+        "label": "Cumulative time in \"WON - Project Set Up (Opportunity Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'WON - Project Set Up' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_30c19921_8a11_49b3_865c_a0df80c4ddb4_1939785175",
+        "label": "Cumulative time in \"Stalled (Opportunity Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Stalled' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_96534d0f_9e21_4f53_adbd_40203f25a770_1944545824",
+        "label": "Cumulative time in \"Solution Design (Opportunity Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Solution Design' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_closedlost",
+        "label": "Cumulative time in \"LOST (Opportunity Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'LOST' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_closedwon",
+        "label": "Cumulative time in \"WON (Opportunity Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'WON' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_deal_registration_businessconsiderations_174835023",
+        "label": "Cumulative time in \"Business Considerations (HubSpot Shared Selling Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Business Considerations' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_deal_registration_closed_lost",
+        "label": "Cumulative time in \"Closed Lost (HubSpot Shared Selling Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Closed Lost' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_deal_registration_closed_won",
+        "label": "Cumulative time in \"Closed Won (HubSpot Shared Selling Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Closed Won' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_deal_registration_discovery",
+        "label": "Cumulative time in \"Discovery (HubSpot Shared Selling Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Discovery' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_deal_registration_outforsignature_738869205",
+        "label": "Cumulative time in \"Out for Signature (HubSpot Shared Selling Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Out for Signature' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_deal_registration_pricingandterms_485324537",
+        "label": "Cumulative time in \"Pricing and Terms (HubSpot Shared Selling Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Pricing and Terms' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_deal_registration_solutiondemo_860249051",
+        "label": "Cumulative time in \"Solution Demo (HubSpot Shared Selling Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Solution Demo' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_cumulative_time_in_decisionmakerboughtin",
+        "label": "Cumulative time in \"Decision Maker Bought-In (Opportunity Pipeline)\"",
+        "description": "The cumulative time in seconds spent by the deal in the 'Decision Maker Bought-In' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_14370189",
+        "label": "Latest time in \"Prospect (Program Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Prospect' stage, 'Program Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_14370190",
+        "label": "Latest time in \"Stalled (Program Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Stalled' stage, 'Program Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_14370191",
+        "label": "Latest time in \"Intro Call (Program Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Intro Call' stage, 'Program Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_14370194",
+        "label": "Latest time in \"Opt In (Program Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Opt In' stage, 'Program Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_14370195",
+        "label": "Latest time in \"Opt Out (Program Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Opt Out' stage, 'Program Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_14373537",
+        "label": "Latest time in \"Decision Pending (Program Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Decision Pending' stage, 'Program Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_19117067",
+        "label": "Latest time in \"Renewal (Opportunity Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Renewal' stage, 'Opportunity Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_1fff24f0_b582_439c_89fa_2d59ca9e4bcf_1161023899",
+        "label": "Latest time in \"Proposal Sent (Opportunity Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Proposal Sent' stage, 'Opportunity Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_2052484",
+        "label": "Latest time in \"Prospecting (Opportunity Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Prospecting' stage, 'Opportunity Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_2256968",
+        "label": "Latest time in \"WON - Project Set Up (Opportunity Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'WON - Project Set Up' stage, 'Opportunity Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_30c19921_8a11_49b3_865c_a0df80c4ddb4_1939785175",
+        "label": "Latest time in \"Stalled (Opportunity Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Stalled' stage, 'Opportunity Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_96534d0f_9e21_4f53_adbd_40203f25a770_1944545824",
+        "label": "Latest time in \"Solution Design (Opportunity Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Solution Design' stage, 'Opportunity Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_closedlost",
+        "label": "Latest time in \"LOST (Opportunity Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'LOST' stage, 'Opportunity Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_closedwon",
+        "label": "Latest time in \"WON (Opportunity Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'WON' stage, 'Opportunity Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_deal_registration_businessconsiderations_174835023",
+        "label": "Latest time in \"Business Considerations (HubSpot Shared Selling Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Business Considerations' stage, 'HubSpot Shared Selling Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_deal_registration_closed_lost",
+        "label": "Latest time in \"Closed Lost (HubSpot Shared Selling Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Closed Lost' stage, 'HubSpot Shared Selling Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_deal_registration_closed_won",
+        "label": "Latest time in \"Closed Won (HubSpot Shared Selling Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Closed Won' stage, 'HubSpot Shared Selling Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_deal_registration_discovery",
+        "label": "Latest time in \"Discovery (HubSpot Shared Selling Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Discovery' stage, 'HubSpot Shared Selling Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_deal_registration_outforsignature_738869205",
+        "label": "Latest time in \"Out for Signature (HubSpot Shared Selling Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Out for Signature' stage, 'HubSpot Shared Selling Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_deal_registration_pricingandterms_485324537",
+        "label": "Latest time in \"Pricing and Terms (HubSpot Shared Selling Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Pricing and Terms' stage, 'HubSpot Shared Selling Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_deal_registration_solutiondemo_860249051",
+        "label": "Latest time in \"Solution Demo (HubSpot Shared Selling Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Solution Demo' stage, 'HubSpot Shared Selling Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_latest_time_in_decisionmakerboughtin",
+        "label": "Latest time in \"Decision Maker Bought-In (Opportunity Pipeline)\"",
+        "description": "The total time in seconds spent by the deal in the 'Decision Maker Bought-In' stage, 'Opportunity Pipeline' pipeline since it last entered this stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "invoice_amount",
+        "label": "Invoice Amount Billed",
+        "description": "Indicates the total invoice amount of the transaction",
+        "group": "accounting"
+      },
+      {
+        "name": "invoiced__all",
+        "label": "Invoiced: All",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "line_items__cost",
+        "label": "Line Items: Cost",
+        "description": "",
+        "group": "revenue"
+      },
+      {
+        "name": "line_items__margin",
+        "label": "Line Items: Margin",
+        "description": "",
+        "group": "revenue"
+      },
+      {
+        "name": "line_items__revenue",
+        "label": "Line Items: Revenue",
+        "description": "",
+        "group": "revenue"
+      },
+      {
+        "name": "margin_",
+        "label": "Margin %",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "media_budget",
+        "label": "Media Budget",
+        "description": "Total overall media budget for duration of project.",
+        "group": "revenue"
+      },
+      {
+        "name": "mrr",
+        "label": "MRR",
+        "description": "Managed Recurring Revenue (retainer amount)",
+        "group": "revenue"
+      },
+      {
+        "name": "num_associated_contacts",
+        "label": "Number of Associated Contacts",
+        "description": "The number of contacts associated with this deal. This property is set automatically by HubSpot.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "num_contacted_notes",
+        "label": "Number of times contacted",
+        "description": "The number of times a call, email or meeting was logged for this deal",
+        "group": "dealinformation"
+      },
+      {
+        "name": "num_notes",
+        "label": "Number of Sales Activities",
+        "description": "The total number of sales activities (notes, calls, emails, meetings, or tasks) logged for a deal. This is updated automatically by HubSpot.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "of_invoices",
+        "label": "# of Invoices",
+        "description": "",
+        "group": "revenue"
+      },
+      {
+        "name": "project_hard_cost_paid_media",
+        "label": "Project: Hard Cost - Paid Media",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "project_hard_cost_print",
+        "label": "Project: Hard Cost - Print",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "project_hard_cost_software",
+        "label": "Project: Hard Cost - Software",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "project_hard_cost_total",
+        "label": "Project: Hard Cost - Total",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "project_hard_cost_travel",
+        "label": "Project: Hard Cost - Travel",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "recurring_revenue_amount",
+        "label": "Recurring revenue amount",
+        "description": "Amount of recurring revenue associated with this deal",
+        "group": "recurring_revenue_information"
+      },
+      {
+        "name": "software_budget",
+        "label": "Software Budget",
+        "description": "",
+        "group": "revenue"
+      },
+      {
+        "name": "sum_of_all_invoices",
+        "label": "Sum of all Invoices",
+        "description": "The sum of all invoices of one deal.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "total_amount_per_invoice",
+        "label": "Total amount per invoice ",
+        "description": "",
+        "group": "accounting"
+      }
+    ],
+    "enumeration": [
+      {
+        "name": "approval",
+        "label": "Approval",
+        "description": "",
+        "group": "dealinformation"
+      },
+      {
+        "name": "co_marketing_partner",
+        "label": "Co-Marketing Partner",
+        "description": "",
+        "group": "dealinformation"
+      },
+      {
+        "name": "create_gdrive_folder",
+        "label": "Create GDrive Folder",
+        "description": "",
+        "group": "integration"
+      },
+      {
+        "name": "deal_currency_code",
+        "label": "Currency",
+        "description": "Currency code for the deal.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "deal_registration_hubspot_shared_selling",
+        "label": "HubSpot Shared-selling",
+        "description": "To indicate whether the deal is a HubSpot shared-selling deal.",
+        "group": "deal_registration_information"
+      },
+      {
+        "name": "deal_registration_most_likely_hubspot_product_s_",
+        "label": "Most Likely HubSpot Product(s)",
+        "description": "The most likely HubSpot product(s) of the deal. Maintained by the deal's HubSpot Sales Lead.",
+        "group": "deal_registration_information"
+      },
+      {
+        "name": "dealstage",
+        "label": "Deal Stage",
+        "description": "The stage of the deal. Deal stages allow you to categorize and track the progress of the deals that you are working on.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "dealtype",
+        "label": "Deal Type",
+        "description": "Type of the deal",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_all_accessible_team_ids",
+        "label": "All teams",
+        "description": "The team IDs, including the team hierarchy, of all default and custom owner properties for this record.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_all_assigned_business_unit_ids",
+        "label": "Brands",
+        "description": "The brands this record is assigned to.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_all_collaborator_owner_ids",
+        "label": "Deal Collaborator",
+        "description": "Owner ids of the users involved in closing the deal",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_all_deal_split_owner_ids",
+        "label": "Deal Split Users",
+        "description": "The owner ids of all associated Deal Splits. This property is set automatically by HubSpot.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_all_owner_ids",
+        "label": "All owner IDs",
+        "description": "Values of all default and custom owner properties for this record.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_all_team_ids",
+        "label": "All team IDs",
+        "description": "The team IDs of all default and custom owner properties for this record.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_analytics_latest_source",
+        "label": "Latest Traffic Source",
+        "description": "Source for the contact either directly or indirectly associated with the last session activity for this deal",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_analytics_latest_source_company",
+        "label": "Latest Traffic Source Company",
+        "description": "Source for the company with an associated contact with the last session activity for this deal",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_analytics_latest_source_contact",
+        "label": "Latest Traffic Source Contact",
+        "description": "Source for the directly associated contact with the last session activity for this deal",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_analytics_source",
+        "label": "Original Traffic Source",
+        "description": "Original source for the contact with the earliest activity for this deal.",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_associated_deal_registration_deal_type",
+        "label": "Associated Shared Deal Type",
+        "description": "The deal type of the associated Shared Deal. (This field is only accurate on Partner portals!)",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_associated_deal_registration_product_interests",
+        "label": "Associated Shared Deal Product Interests",
+        "description": "The most likely HubSpot product(s) of the deal synced from the associated Shared Deal. (This field is only accurate on Partner portals!)",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_attributed_team_ids",
+        "label": "Attributed reporting team",
+        "description": "The set of teams that this deal is attributed to. If an owner is specified at the time of creation, the record will default to the owner's primary team.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_deal_amount_calculation_preference",
+        "label": "Deal amount calculation preference",
+        "description": "Specifies how deal amount should be calculated from line items",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_deal_registration_mrr_currency_code",
+        "label": "HubSpot Shared Deal MRR Currency Code",
+        "description": "Currency code for the MRR of the quote purchased for this Shared Deal.",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_manual_forecast_category",
+        "label": "Forecast category",
+        "description": "The likelihood a deal will close. This property is used for manual forecasting your deals.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_merged_object_ids",
+        "label": "Merged Deal IDs",
+        "description": "The list of Deal record IDs that have been merged into this Deal. This value is set automatically by HubSpot.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_notes_next_activity_type",
+        "label": "Next Activity Type",
+        "description": "The type of the next upcoming activity for a deal. This property is set automatically by HubSpot based on user action. This includes logging a future call, sales email, or meeting using the Log feature, as well as creating a future task or scheduling a future meeting. This is updated automatically by HubSpot.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_object_source_label",
+        "label": "Record source",
+        "description": "How this record was created.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_owning_teams",
+        "label": "Owning Teams",
+        "description": "The teams that are attributed to this record.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_priority",
+        "label": "Priority",
+        "description": "",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_shared_team_ids",
+        "label": "Shared teams",
+        "description": "Additional teams whose users can access the Deal based on their permissions. This can be set manually or through Workflows or APIs.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_shared_user_ids",
+        "label": "Shared users",
+        "description": "Additional users that can access the Deal based on their permissions. This can be set manually or through Workflows and APIs.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_tag_ids",
+        "label": "Deal Tags",
+        "description": "List of tag ids applicable to a deal. This property is set automatically by HubSpot.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_user_ids_of_all_notification_followers",
+        "label": "User IDs of all notification followers",
+        "description": "The user IDs of all users that have clicked follow within the object to opt-in to getting follow notifications",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_user_ids_of_all_notification_unfollowers",
+        "label": "User IDs of all notification unfollowers",
+        "description": "The user IDs of all object owners that have clicked unfollow within the object to opt-out of getting follow notifications",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_user_ids_of_all_owners",
+        "label": "User IDs of all owners",
+        "description": "The user IDs of all owners of this record.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hubspot_owner_id",
+        "label": "Deal owner",
+        "description": "The owner of the deal",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hubspot_team_id",
+        "label": "HubSpot Team",
+        "description": "The team of the owner of the deal.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "invoices_created",
+        "label": "Invoices Created",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "invoicing_terms",
+        "label": "Invoicing Terms",
+        "description": "",
+        "group": "revenue"
+      },
+      {
+        "name": "line_items_added",
+        "label": "Line Items Added",
+        "description": "",
+        "group": "integration"
+      },
+      {
+        "name": "lost_reason",
+        "label": "Lost Reason",
+        "description": "",
+        "group": "dealinformation"
+      },
+      {
+        "name": "marketing_coordinator",
+        "label": "Marketing Coordinator",
+        "description": "",
+        "group": "deal_roles"
+      },
+      {
+        "name": "payment_type",
+        "label": "Payment Type",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "pipeline",
+        "label": "Pipeline",
+        "description": "The pipeline the deal is in. This determines which stages are options for the deal.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "program",
+        "label": "Program",
+        "description": "",
+        "group": "program"
+      },
+      {
+        "name": "program_partner__status",
+        "label": "Program Partner: Status",
+        "description": "",
+        "group": "program"
+      },
+      {
+        "name": "project_owner",
+        "label": "Project Owner",
+        "description": "",
+        "group": "dealinformation"
+      },
+      {
+        "name": "project_type",
+        "label": "Deal Category",
+        "description": "The type of project this deal is related to",
+        "group": "dealinformation"
+      },
+      {
+        "name": "recurring_revenue_deal_type",
+        "label": "Recurring revenue deal type",
+        "description": "Deal type for recurring revenue reporting",
+        "group": "recurring_revenue_information"
+      },
+      {
+        "name": "recurring_revenue_inactive_reason",
+        "label": "Recurring revenue inactive reason",
+        "description": "Reason the recurring revenue for this ideal is no longer collected",
+        "group": "recurring_revenue_information"
+      },
+      {
+        "name": "renewal_created",
+        "label": "Renewal Created",
+        "description": "",
+        "group": "dealinformation"
+      },
+      {
+        "name": "retainer_timeframe",
+        "label": "Retainer Timeframe",
+        "description": "Total number of retainer months in contract",
+        "group": "revenue"
+      },
+      {
+        "name": "team",
+        "label": "Team",
+        "description": "",
+        "group": "deal_roles"
+      }
+    ],
+    "string": [
+      {
+        "name": "bidtype",
+        "label": "BidType",
+        "description": "",
+        "group": "dealinformation"
+      },
+      {
+        "name": "billing_email",
+        "label": "Billing Email",
+        "description": "",
+        "group": "deal_roles"
+      },
+      {
+        "name": "cisco_geo_id",
+        "label": "Cisco GEO ID",
+        "description": "",
+        "group": "program"
+      },
+      {
+        "name": "closed_lost_reason",
+        "label": "Closed Lost Reason",
+        "description": "Reason why this deal was lost",
+        "group": "dealinformation"
+      },
+      {
+        "name": "closed_won_reason",
+        "label": "Closed Won Reason",
+        "description": "Reason why this deal was won",
+        "group": "dealinformation"
+      },
+      {
+        "name": "company_name",
+        "label": "Company Name",
+        "description": "",
+        "group": "dealinformation"
+      },
+      {
+        "name": "dealname",
+        "label": "Deal Name",
+        "description": "The name given to this deal.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "description",
+        "label": "Deal Description",
+        "description": "Description of the deal",
+        "group": "dealinformation"
+      },
+      {
+        "name": "engagements_last_meeting_booked_campaign",
+        "label": "Campaign of last booking in meetings tool",
+        "description": "This UTM parameter shows which marketing campaign (e.g. a specific email) referred an associated contact to the meetings tool for their most recent booking. This property is only populated when you add tracking parameters to your meeting link.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "engagements_last_meeting_booked_medium",
+        "label": "Medium of last booking in meetings tool",
+        "description": "This UTM parameter shows which channel (e.g. email) referred an associated contact to the meetings tool for their most recent booking. This property is only populated when you add tracking parameters to your meeting link.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "engagements_last_meeting_booked_source",
+        "label": "Source of last booking in meetings tool",
+        "description": "This UTM parameter shows which site (e.g. Twitter) referred an associated contact to the meetings tool for their most recent booking. This property is only populated when you add tracking parameters to your meeting link. ",
+        "group": "dealinformation"
+      },
+      {
+        "name": "executive_summary",
+        "label": "Executive Summary",
+        "description": "Executive summary which is used for deal Statement-of-Work.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "gdrive_company_id",
+        "label": "GDrive Company ID",
+        "description": "NEW - Updated field format for 2024. Use this version versus the previous text field version.",
+        "group": "integration"
+      },
+      {
+        "name": "google_drive_id",
+        "label": "Google Drive Project ID",
+        "description": "Project folder within Projects Shared Drive (Google Drive)",
+        "group": "integration"
+      },
+      {
+        "name": "hs_analytics_latest_source_data_1",
+        "label": "Latest Traffic Source Data 1",
+        "description": "Additional source details of the last session attributed to any contacts that are directly or indirectly associated with this deal",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_analytics_latest_source_data_1_company",
+        "label": "Latest Traffic Source Data 1 Company",
+        "description": "Additional source details of the last session attributed to any contacts that are indirectly associated with this deal (via a company association)",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_analytics_latest_source_data_1_contact",
+        "label": "Latest Traffic Source Data 1 Contact",
+        "description": "Additional source details of the last session attributed to any contacts that are directly associated with this deal",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_analytics_latest_source_data_2",
+        "label": "Latest Traffic Source Data 2",
+        "description": "Additional source details of the last session attributed to any contacts that are directly or indirectly associated with this deal",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_analytics_latest_source_data_2_company",
+        "label": "Latest Traffic Source Data 2 Company",
+        "description": "Additional source details of the last session attributed to any contacts that are indirectly associated with this deal",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_analytics_latest_source_data_2_contact",
+        "label": "Latest Traffic Source Data 2 Contact",
+        "description": "Additional source details of the last session attributed to any contacts that are directly associated with this deal",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_analytics_source_data_1",
+        "label": "Original Traffic Source Drill-Down 1",
+        "description": "Additional information about the original source for the associated contact, or associated company if there is no contact, with the oldest value for the Time first seen property.",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_analytics_source_data_2",
+        "label": "Original Traffic Source Drill-Down 2",
+        "description": "Additional information about the original source for the associated contact, or associated company if there is no contact, with the oldest value for the Time first seen property.",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_campaign",
+        "label": "HubSpot Campaign",
+        "description": "The marketing campaign the deal is associated with",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_latest_approval_status",
+        "label": "Latest Approval Status",
+        "description": "The latest approval status. Used by HubSpot to track pipeline approval processes.",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_line_item_global_term_hs_discount_percentage",
+        "label": "Global Term Line Item Discount Percentage",
+        "description": "For internal HubSpot Application use only. Global term for the discount percentage applied.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_line_item_global_term_hs_recurring_billing_period",
+        "label": "Global Term Line Item Recurring Billing Period",
+        "description": "For internal HubSpot Application use only. Global term for product recurring billing duration.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_line_item_global_term_hs_recurring_billing_start_date",
+        "label": "Global Term Line Item Recurring Billing Start Date",
+        "description": "For internal HubSpot Application use only. Global term for recurring billing start date for a line item.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_line_item_global_term_recurringbillingfrequency",
+        "label": "Global Term Line Item Recurring Billing Frequency",
+        "description": "For internal HubSpot Application use only. Global term for how frequently the product is billed.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_next_meeting_name",
+        "label": "Next Meeting Name",
+        "description": "",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_next_step",
+        "label": "Next step",
+        "description": "A short description of the next step for the deal",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_object_source",
+        "label": "Record creation source",
+        "description": "Raw internal PropertySource present in the RequestMeta when this record was created.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_object_source_detail_1",
+        "label": "Record source detail 1",
+        "description": "First level of detail on how this record was created.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_object_source_detail_2",
+        "label": "Record source detail 2",
+        "description": "Second level of detail on how this record was created.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_object_source_detail_3",
+        "label": "Record source detail 3",
+        "description": "Third level of detail on how this record was created.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_object_source_id",
+        "label": "Record creation source ID",
+        "description": "Raw internal sourceId present in the RequestMeta when this record was created.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_salesforceopportunityid",
+        "label": "Salesforce Opportunity ID",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "hs_synced_deal_owner_name_and_email",
+        "label": "HubSpot Sales Lead",
+        "description": "The HubSpot sales lead that owns this Shared Deal.",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_unique_creation_key",
+        "label": "Unique creation key",
+        "description": "Unique property used for idempotent creates",
+        "group": "dealinformation"
+      },
+      {
+        "name": "invoice_number",
+        "label": "Invoice Number",
+        "description": "Unique invoice identifier",
+        "group": "accounting"
+      },
+      {
+        "name": "invoice_recipient",
+        "label": "Invoice Recipient",
+        "description": "E-mail address where the invoice is sent",
+        "group": "accounting"
+      },
+      {
+        "name": "invoice_status",
+        "label": "Invoice Status",
+        "description": "The invoice status of the most recent invoice created on the deal",
+        "group": "accounting"
+      },
+      {
+        "name": "ip__sync_extension__external_source_account_id",
+        "label": "Source account ID",
+        "description": "The ID of the external account that synced with this deal.",
+        "group": "ip__sync_extension__sync_extension"
+      },
+      {
+        "name": "ip__sync_extension__external_source_app_id",
+        "label": "Source app ID",
+        "description": "The ID of the app that synced with this deal.",
+        "group": "ip__sync_extension__sync_extension"
+      },
+      {
+        "name": "primary_approver",
+        "label": "Primary Approver",
+        "description": "",
+        "group": "deal_roles"
+      },
+      {
+        "name": "qb_customer_id",
+        "label": "QB Customer ID (LEGACY)",
+        "description": "",
+        "group": "integration"
+      },
+      {
+        "name": "quickbooks_customer_id",
+        "label": "Quickbooks Customer ID",
+        "description": "",
+        "group": "integration"
+      },
+      {
+        "name": "quickbooksprojectid",
+        "label": "QuickbooksProjectID",
+        "description": "",
+        "group": "integration"
+      },
+      {
+        "name": "recent_invoice_id",
+        "label": "Recent Invoice ID",
+        "description": "",
+        "group": "accounting"
+      },
+      {
+        "name": "wrike_client_id",
+        "label": "Wrike Client ID",
+        "description": "",
+        "group": "integration"
+      },
+      {
+        "name": "wrike_project_id",
+        "label": "Wrike Project ID",
+        "description": "Wrike project ID used for integration purposes",
+        "group": "integration"
+      },
+      {
+        "name": "ziflow_company_id",
+        "label": "Ziflow Company ID (LEGACY)",
+        "description": "",
+        "group": "integration"
+      },
+      {
+        "name": "ziflow_id___company",
+        "label": "Ziflow ID - Company",
+        "description": "",
+        "group": "integration"
+      },
+      {
+        "name": "ziflow_internal_review_id",
+        "label": "Ziflow Internal Review ID",
+        "description": "",
+        "group": "integration"
+      }
+    ],
+    "datetime": [
+      {
+        "name": "closedate",
+        "label": "Close Date",
+        "description": "The expected close date of the deal",
+        "group": "dealinformation"
+      },
+      {
+        "name": "createdate",
+        "label": "Create Date",
+        "description": "The date the deal was created. This property is set automatically by HubSpot.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "engagements_last_meeting_booked",
+        "label": "Date of last meeting booked in meetings tool",
+        "description": "The date of the most recent meeting an associated contact has booked through the meetings tool.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_analytics_latest_source_timestamp",
+        "label": "Latest Traffic Source Timestamp",
+        "description": "Timestamp of when latest source occurred for either a directly or indirectly associated contact",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_analytics_latest_source_timestamp_company",
+        "label": "Latest Traffic Source Timestamp Company",
+        "description": "Timestamp of when latest source occurred for an indirectly associated contact",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_analytics_latest_source_timestamp_contact",
+        "label": "Latest Traffic Source Timestamp Contact",
+        "description": "Timestamp of when latest source occurred for a directly associated contact",
+        "group": "analyticsinformation"
+      },
+      {
+        "name": "hs_closed_won_date",
+        "label": "Closed Won Date (Internal)",
+        "description": "Returns closedate if this deal is closed won",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_createdate",
+        "label": "HubSpot Create Date",
+        "description": "The date the deal was created. This property is set automatically by HubSpot.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_date_entered_14370189",
+        "label": "Date entered 'Prospect (Program Pipeline)'",
+        "description": "The date and time when the deal entered the 'Prospect' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_14370190",
+        "label": "Date entered 'Stalled (Program Pipeline)'",
+        "description": "The date and time when the deal entered the 'Stalled' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_14370191",
+        "label": "Date entered 'Intro Call (Program Pipeline)'",
+        "description": "The date and time when the deal entered the 'Intro Call' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_14370194",
+        "label": "Date entered 'Opt In (Program Pipeline)'",
+        "description": "The date and time when the deal entered the 'Opt In' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_14370195",
+        "label": "Date entered 'Opt Out (Program Pipeline)'",
+        "description": "The date and time when the deal entered the 'Opt Out' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_14373537",
+        "label": "Date entered 'Decision Pending (Program Pipeline)'",
+        "description": "The date and time when the deal entered the 'Decision Pending' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_19117067",
+        "label": "Date entered 'Renewal (Opportunity Pipeline)'",
+        "description": "The date and time when the deal entered the 'Renewal' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_1fff24f0_b582_439c_89fa_2d59ca9e4bcf_1161023899",
+        "label": "Date entered 'Proposal Sent (Opportunity Pipeline)'",
+        "description": "The date and time when the deal entered the 'Proposal Sent' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_2052484",
+        "label": "Date entered 'Prospecting (Opportunity Pipeline)'",
+        "description": "The date and time when the deal entered the 'Prospecting' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_2256968",
+        "label": "Date entered 'WON - Project Set Up (Opportunity Pipeline)'",
+        "description": "The date and time when the deal entered the 'WON - Project Set Up' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_30c19921_8a11_49b3_865c_a0df80c4ddb4_1939785175",
+        "label": "Date entered 'Stalled (Opportunity Pipeline)'",
+        "description": "The date and time when the deal entered the 'Stalled' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_96534d0f_9e21_4f53_adbd_40203f25a770_1944545824",
+        "label": "Date entered 'Solution Design (Opportunity Pipeline)'",
+        "description": "The date and time when the deal entered the 'Solution Design' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_appointmentscheduled",
+        "label": "Date entered 'Appointment Scheduled (Sales Pipeline)'",
+        "description": "The date and time when the deal entered the 'Appointment Scheduled' stage, 'Sales Pipeline' pipeline",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_date_entered_closedlost",
+        "label": "Date entered 'LOST (Opportunity Pipeline)'",
+        "description": "The date and time when the deal entered the 'LOST' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_closedwon",
+        "label": "Date entered 'WON (Opportunity Pipeline)'",
+        "description": "The date and time when the deal entered the 'WON' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_contractsent",
+        "label": "Date entered 'Verbal Commit (Opportunity Pipeline)'",
+        "description": "The date and time when the deal entered the 'Verbal Commit' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_deal_registration_businessconsiderations_174835023",
+        "label": "Date entered 'Business Considerations (HubSpot Shared Selling Pipeline)'",
+        "description": "The date and time when the deal entered the 'Business Considerations' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_deal_registration_closed_lost",
+        "label": "Date entered 'Closed Lost (HubSpot Shared Selling Pipeline)'",
+        "description": "The date and time when the deal entered the 'Closed Lost' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_deal_registration_closed_won",
+        "label": "Date entered 'Closed Won (HubSpot Shared Selling Pipeline)'",
+        "description": "The date and time when the deal entered the 'Closed Won' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_deal_registration_discovery",
+        "label": "Date entered 'Discovery (HubSpot Shared Selling Pipeline)'",
+        "description": "The date and time when the deal entered the 'Discovery' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_deal_registration_outforsignature_738869205",
+        "label": "Date entered 'Out for Signature (HubSpot Shared Selling Pipeline)'",
+        "description": "The date and time when the deal entered the 'Out for Signature' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_deal_registration_pricingandterms_485324537",
+        "label": "Date entered 'Pricing and Terms (HubSpot Shared Selling Pipeline)'",
+        "description": "The date and time when the deal entered the 'Pricing and Terms' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_deal_registration_solutiondemo_860249051",
+        "label": "Date entered 'Solution Demo (HubSpot Shared Selling Pipeline)'",
+        "description": "The date and time when the deal entered the 'Solution Demo' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_decisionmakerboughtin",
+        "label": "Date entered 'Decision Maker Bought-In (Opportunity Pipeline)'",
+        "description": "The date and time when the deal entered the 'Decision Maker Bought-In' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_entered_presentationscheduled",
+        "label": "Date entered 'Presentation Scheduled (Sales Pipeline)'",
+        "description": "The date and time when the deal entered the 'Presentation Scheduled' stage, 'Sales Pipeline' pipeline",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_date_entered_qualifiedtobuy",
+        "label": "Date entered 'Qualified To Buy (Sales Pipeline)'",
+        "description": "The date and time when the deal entered the 'Qualified To Buy' stage, 'Sales Pipeline' pipeline",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_date_exited_14370189",
+        "label": "Date exited 'Prospect (Program Pipeline)'",
+        "description": "The date and time when the deal exited the 'Prospect' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_14370190",
+        "label": "Date exited 'Stalled (Program Pipeline)'",
+        "description": "The date and time when the deal exited the 'Stalled' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_14370191",
+        "label": "Date exited 'Intro Call (Program Pipeline)'",
+        "description": "The date and time when the deal exited the 'Intro Call' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_14370194",
+        "label": "Date exited 'Opt In (Program Pipeline)'",
+        "description": "The date and time when the deal exited the 'Opt In' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_14370195",
+        "label": "Date exited 'Opt Out (Program Pipeline)'",
+        "description": "The date and time when the deal exited the 'Opt Out' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_14373537",
+        "label": "Date exited 'Decision Pending (Program Pipeline)'",
+        "description": "The date and time when the deal exited the 'Decision Pending' stage, 'Program Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_19117067",
+        "label": "Date exited 'Renewal (Opportunity Pipeline)'",
+        "description": "The date and time when the deal exited the 'Renewal' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_1fff24f0_b582_439c_89fa_2d59ca9e4bcf_1161023899",
+        "label": "Date exited 'Proposal Sent (Opportunity Pipeline)'",
+        "description": "The date and time when the deal exited the 'Proposal Sent' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_2052484",
+        "label": "Date exited 'Prospecting (Opportunity Pipeline)'",
+        "description": "The date and time when the deal exited the 'Prospecting' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_2256968",
+        "label": "Date exited 'WON - Project Set Up (Opportunity Pipeline)'",
+        "description": "The date and time when the deal exited the 'WON - Project Set Up' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_30c19921_8a11_49b3_865c_a0df80c4ddb4_1939785175",
+        "label": "Date exited 'Stalled (Opportunity Pipeline)'",
+        "description": "The date and time when the deal exited the 'Stalled' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_96534d0f_9e21_4f53_adbd_40203f25a770_1944545824",
+        "label": "Date exited 'Solution Design (Opportunity Pipeline)'",
+        "description": "The date and time when the deal exited the 'Solution Design' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_appointmentscheduled",
+        "label": "Date exited 'Appointment Scheduled (Sales Pipeline)'",
+        "description": "The date and time when the deal exited the 'Appointment Scheduled' stage, 'Sales Pipeline' pipeline",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_date_exited_closedlost",
+        "label": "Date exited 'LOST (Opportunity Pipeline)'",
+        "description": "The date and time when the deal exited the 'LOST' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_closedwon",
+        "label": "Date exited 'WON (Opportunity Pipeline)'",
+        "description": "The date and time when the deal exited the 'WON' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_contractsent",
+        "label": "Date exited 'Verbal Commit (Opportunity Pipeline)'",
+        "description": "The date and time when the deal exited the 'Verbal Commit' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_deal_registration_businessconsiderations_174835023",
+        "label": "Date exited 'Business Considerations (HubSpot Shared Selling Pipeline)'",
+        "description": "The date and time when the deal exited the 'Business Considerations' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_deal_registration_closed_lost",
+        "label": "Date exited 'Closed Lost (HubSpot Shared Selling Pipeline)'",
+        "description": "The date and time when the deal exited the 'Closed Lost' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_deal_registration_closed_won",
+        "label": "Date exited 'Closed Won (HubSpot Shared Selling Pipeline)'",
+        "description": "The date and time when the deal exited the 'Closed Won' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_deal_registration_discovery",
+        "label": "Date exited 'Discovery (HubSpot Shared Selling Pipeline)'",
+        "description": "The date and time when the deal exited the 'Discovery' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_deal_registration_outforsignature_738869205",
+        "label": "Date exited 'Out for Signature (HubSpot Shared Selling Pipeline)'",
+        "description": "The date and time when the deal exited the 'Out for Signature' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_deal_registration_pricingandterms_485324537",
+        "label": "Date exited 'Pricing and Terms (HubSpot Shared Selling Pipeline)'",
+        "description": "The date and time when the deal exited the 'Pricing and Terms' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_deal_registration_solutiondemo_860249051",
+        "label": "Date exited 'Solution Demo (HubSpot Shared Selling Pipeline)'",
+        "description": "The date and time when the deal exited the 'Solution Demo' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_decisionmakerboughtin",
+        "label": "Date exited 'Decision Maker Bought-In (Opportunity Pipeline)'",
+        "description": "The date and time when the deal exited the 'Decision Maker Bought-In' stage, 'Opportunity Pipeline' pipeline",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_date_exited_presentationscheduled",
+        "label": "Date exited 'Presentation Scheduled (Sales Pipeline)'",
+        "description": "The date and time when the deal exited the 'Presentation Scheduled' stage, 'Sales Pipeline' pipeline",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_date_exited_qualifiedtobuy",
+        "label": "Date exited 'Qualified To Buy (Sales Pipeline)'",
+        "description": "The date and time when the deal exited the 'Qualified To Buy' stage, 'Sales Pipeline' pipeline",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_lastmodifieddate",
+        "label": "Last Modified Date",
+        "description": "Most recent timestamp of any property update for this deal. This includes HubSpot internal properties, which can be visible or hidden. This property is updated automatically.",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_latest_meeting_activity",
+        "label": "Latest meeting activity",
+        "description": "The date of the most recent meeting (past or upcoming) logged for, scheduled with, or booked by a contact associated with this deal.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_next_meeting_start_time",
+        "label": "Next Meeting Start Time",
+        "description": "",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_next_step_updated_at",
+        "label": "Next Step Updated At",
+        "description": "Timestamp of the most recent update to Next Step property",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_sales_email_last_replied",
+        "label": "Recent Sales Email Replied Date",
+        "description": "The last time a tracked sales email was replied to for this deal",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_v2_date_entered_14370189",
+        "label": "Date entered \"Prospect (Program Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Prospect' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_14370190",
+        "label": "Date entered \"Stalled (Program Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Stalled' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_14370191",
+        "label": "Date entered \"Intro Call (Program Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Intro Call' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_14370194",
+        "label": "Date entered \"Opt In (Program Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Opt In' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_14370195",
+        "label": "Date entered \"Opt Out (Program Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Opt Out' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_14373537",
+        "label": "Date entered \"Decision Pending (Program Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Decision Pending' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_19117067",
+        "label": "Date entered \"Renewal (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Renewal' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_1fff24f0_b582_439c_89fa_2d59ca9e4bcf_1161023899",
+        "label": "Date entered \"Proposal Sent (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Proposal Sent' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_2052484",
+        "label": "Date entered \"Prospecting (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Prospecting' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_2256968",
+        "label": "Date entered \"WON - Project Set Up (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal entered the 'WON - Project Set Up' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_30c19921_8a11_49b3_865c_a0df80c4ddb4_1939785175",
+        "label": "Date entered \"Stalled (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Stalled' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_96534d0f_9e21_4f53_adbd_40203f25a770_1944545824",
+        "label": "Date entered \"Solution Design (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Solution Design' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_closedlost",
+        "label": "Date entered \"LOST (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal entered the 'LOST' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_closedwon",
+        "label": "Date entered \"WON (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal entered the 'WON' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_current_stage",
+        "label": "Date entered current stage",
+        "description": "The date this object entered its current pipeline stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_deal_registration_businessconsiderations_174835023",
+        "label": "Date entered \"Business Considerations (HubSpot Shared Selling Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Business Considerations' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_deal_registration_closed_lost",
+        "label": "Date entered \"Closed Lost (HubSpot Shared Selling Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Closed Lost' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_deal_registration_closed_won",
+        "label": "Date entered \"Closed Won (HubSpot Shared Selling Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Closed Won' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_deal_registration_discovery",
+        "label": "Date entered \"Discovery (HubSpot Shared Selling Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Discovery' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_deal_registration_outforsignature_738869205",
+        "label": "Date entered \"Out for Signature (HubSpot Shared Selling Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Out for Signature' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_deal_registration_pricingandterms_485324537",
+        "label": "Date entered \"Pricing and Terms (HubSpot Shared Selling Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Pricing and Terms' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_deal_registration_solutiondemo_860249051",
+        "label": "Date entered \"Solution Demo (HubSpot Shared Selling Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Solution Demo' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_entered_decisionmakerboughtin",
+        "label": "Date entered \"Decision Maker Bought-In (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal entered the 'Decision Maker Bought-In' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_14370189",
+        "label": "Date exited \"Prospect (Program Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Prospect' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_14370190",
+        "label": "Date exited \"Stalled (Program Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Stalled' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_14370191",
+        "label": "Date exited \"Intro Call (Program Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Intro Call' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_14370194",
+        "label": "Date exited \"Opt In (Program Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Opt In' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_14370195",
+        "label": "Date exited \"Opt Out (Program Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Opt Out' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_14373537",
+        "label": "Date exited \"Decision Pending (Program Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Decision Pending' stage, 'Program Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_19117067",
+        "label": "Date exited \"Renewal (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Renewal' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_1fff24f0_b582_439c_89fa_2d59ca9e4bcf_1161023899",
+        "label": "Date exited \"Proposal Sent (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Proposal Sent' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_2052484",
+        "label": "Date exited \"Prospecting (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Prospecting' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_2256968",
+        "label": "Date exited \"WON - Project Set Up (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal exited the 'WON - Project Set Up' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_30c19921_8a11_49b3_865c_a0df80c4ddb4_1939785175",
+        "label": "Date exited \"Stalled (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Stalled' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_96534d0f_9e21_4f53_adbd_40203f25a770_1944545824",
+        "label": "Date exited \"Solution Design (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Solution Design' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_closedlost",
+        "label": "Date exited \"LOST (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal exited the 'LOST' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_closedwon",
+        "label": "Date exited \"WON (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal exited the 'WON' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_deal_registration_businessconsiderations_174835023",
+        "label": "Date exited \"Business Considerations (HubSpot Shared Selling Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Business Considerations' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_deal_registration_closed_lost",
+        "label": "Date exited \"Closed Lost (HubSpot Shared Selling Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Closed Lost' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_deal_registration_closed_won",
+        "label": "Date exited \"Closed Won (HubSpot Shared Selling Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Closed Won' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_deal_registration_discovery",
+        "label": "Date exited \"Discovery (HubSpot Shared Selling Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Discovery' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_deal_registration_outforsignature_738869205",
+        "label": "Date exited \"Out for Signature (HubSpot Shared Selling Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Out for Signature' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_deal_registration_pricingandterms_485324537",
+        "label": "Date exited \"Pricing and Terms (HubSpot Shared Selling Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Pricing and Terms' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_deal_registration_solutiondemo_860249051",
+        "label": "Date exited \"Solution Demo (HubSpot Shared Selling Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Solution Demo' stage, 'HubSpot Shared Selling Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_date_exited_decisionmakerboughtin",
+        "label": "Date exited \"Decision Maker Bought-In (Opportunity Pipeline)\"",
+        "description": "The date and time when the deal exited the 'Decision Maker Bought-In' stage, 'Opportunity Pipeline' pipeline",
+        "group": "dealstages"
+      },
+      {
+        "name": "hs_v2_time_in_current_stage",
+        "label": "Time in current stage",
+        "description": "The time this object has spent in the current pipeline stage",
+        "group": "dealstages"
+      },
+      {
+        "name": "hubspot_owner_assigneddate",
+        "label": "Owner assigned date",
+        "description": "The most recent timestamp of when an owner was assigned to this record. This value is set automatically by HubSpot.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "notes_last_contacted",
+        "label": "Last Contacted",
+        "description": "The last time a call, sales email, or meeting was logged for this deal. This is set automatically by HubSpot based on user actions.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "notes_last_updated",
+        "label": "Last Activity Date",
+        "description": "The last time a note, call, email, meeting, or task was logged for a deal. This is set automatically by HubSpot based on user actions in the deal record.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "notes_next_activity_date",
+        "label": "Next Activity Date",
+        "description": "The date of the next upcoming activity for a deal. This property is set automatically by HubSpot based on user action. This includes logging a future call, sales email, or meeting using the Log feature, as well as creating a future task or scheduling a future meeting. This is updated automatically by HubSpot.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "recurring_revenue_inactive_date",
+        "label": "Recurring revenue inactive date",
+        "description": "Date at which recurring revenue for this deal is no longer collected",
+        "group": "recurring_revenue_information"
+      },
+      {
+        "name": "salesforcelastsynctime",
+        "label": "Last Salesforce Sync Time",
+        "description": "",
+        "group": "accounting"
+      }
+    ],
+    "bool": [
+      {
+        "name": "hs_has_empty_conditional_stage_properties",
+        "label": "Has Empty Conditional Stage Properties",
+        "description": "True if the deal is missing conditional stage property values required to progress to the next deal stage.  This is set automatically by HubSpot based on user actions in the deal record.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_is_active_shared_deal",
+        "label": "Is Active Shared Deal",
+        "description": "Indicates if the current deal is an active shared deal. It is set automatically based on the value of hs_num_associated_active_deal_registrations.",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_is_closed",
+        "label": "Is Deal Closed?",
+        "description": "True if the deal was won or lost.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_is_closed_lost",
+        "label": "Is closed lost",
+        "description": "True if the deal is in the closed lost state, false otherwise",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_is_closed_won",
+        "label": "Is Closed Won",
+        "description": "True if the deal is in the closed won state, false otherwise",
+        "group": "deal_activity"
+      },
+      {
+        "name": "hs_is_deal_split",
+        "label": "Deal Split Added",
+        "description": "Indicates if the deal is split between multiple users.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_is_in_first_deal_stage",
+        "label": "Is In First Deal Stage",
+        "description": "True if the deal is in the first stage of its pipeline. This is set automatically by HubSpot based on user actions in the deal record.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_line_item_global_term_hs_discount_percentage_enabled",
+        "label": "Global Term Line Item Discount Percentage Enabled",
+        "description": "For internal HubSpot Application use only. Indicates if the Global term for the discount percentage is enabled.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_line_item_global_term_hs_recurring_billing_period_enabled",
+        "label": "Global Term Line Item Recurring Billing Period Enabled",
+        "description": "For internal HubSpot Application use only. Indicates if the Global term for product recurring billing duration is enabled.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_line_item_global_term_hs_recurring_billing_start_date_enabled",
+        "label": "Global Term Line Item Recurring Billing Start Date Enabled",
+        "description": "For internal HubSpot Application use only. Indicates if the Global term for recurring billing start date for a line item is enabled.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_line_item_global_term_recurringbillingfrequency_enabled",
+        "label": "Global Term Line Item Recurring Billing Frequency Enabled",
+        "description": "For internal HubSpot Application use only. Indicates if the Global term for how frequently the product is billed is enabled",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_read_only",
+        "label": "Read only object",
+        "description": "Determines whether a record can be edited by a user.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_was_imported",
+        "label": "Performed in an import",
+        "description": "Object is part of an import",
+        "group": "dealinformation"
+      },
+      {
+        "name": "salesforcedeleted",
+        "label": "salesforcedeleted",
+        "description": "",
+        "group": "accounting"
+      }
+    ],
+    "object_coordinates": [
+      {
+        "name": "hs_notes_last_activity",
+        "label": "Last Activity",
+        "description": "The coordinates of the last activity for a deal. This is set automatically by HubSpot based on user actions in the deal record.",
+        "group": "dealinformation"
+      },
+      {
+        "name": "hs_notes_next_activity",
+        "label": "Next Activity",
+        "description": "The coordinates of the next upcoming activity for a deal. This is set automatically by HubSpot based on user actions in the deal record.",
+        "group": "dealinformation"
+      }
+    ],
+    "date": [
+      {
+        "name": "invoice_due_date",
+        "label": "Invoice Due Date",
+        "description": "Date when the payment of the transaction is due",
+        "group": "accounting"
+      },
+      {
+        "name": "project_complete_date",
+        "label": "Project Complete Date",
+        "description": "",
+        "group": "revenue"
+      },
+      {
+        "name": "project_start_date",
+        "label": "Project Start Date",
+        "description": "",
+        "group": "revenue"
+      }
+    ]
+  }
+}

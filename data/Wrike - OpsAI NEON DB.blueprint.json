@@ -1,0 +1,2074 @@
+{
+    "name": "Wrike > OpsAI NEON DB",
+    "flow": [
+        {
+            "id": 2,
+            "module": "wrike:universalModule",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 3809234
+            },
+            "mapper": {
+                "url": "/spaces",
+                "method": "GET",
+                "headers": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ]
+            },
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 600,
+                    "name": "get spaces"
+                },
+                "restore": {
+                    "expect": {
+                        "qs": {
+                            "mode": "chose"
+                        },
+                        "method": {
+                            "mode": "chose",
+                            "label": "GET"
+                        },
+                        "headers": {
+                            "mode": "chose",
+                            "items": [
+                                null
+                            ]
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "wrike2"
+                            },
+                            "label": "Make / Wrike (Chris McGovern)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:wrike2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "url",
+                        "type": "text",
+                        "label": "URL",
+                        "required": true
+                    },
+                    {
+                        "name": "method",
+                        "type": "select",
+                        "label": "Method",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "GET",
+                                "POST",
+                                "PUT",
+                                "PATCH",
+                                "DELETE"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "headers",
+                        "spec": [
+                            {
+                                "name": "key",
+                                "type": "text",
+                                "label": "Key"
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Headers"
+                    },
+                    {
+                        "name": "qs",
+                        "spec": [
+                            {
+                                "name": "key",
+                                "type": "text",
+                                "label": "Key"
+                            },
+                            {
+                                "name": "value",
+                                "type": "text",
+                                "label": "Value"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Query String"
+                    },
+                    {
+                        "name": "body",
+                        "type": "any",
+                        "label": "Body"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "builtin:BasicFeeder",
+            "version": 1,
+            "parameters": {},
+            "mapper": {
+                "array": "{{2.body.data}}"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 600
+                },
+                "restore": {
+                    "expect": {
+                        "array": {
+                            "mode": "edit"
+                        }
+                    }
+                },
+                "expect": [
+                    {
+                        "mode": "edit",
+                        "name": "array",
+                        "spec": [],
+                        "type": "array",
+                        "label": "Array"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 9,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "filter": {
+                "name": "Space: Production",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{4.title}}",
+                            "b": "Production",
+                            "o": "text:equal"
+                        }
+                    ]
+                ]
+            },
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": 600
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 3,
+                            "module": "wrike:universalModule",
+                            "version": 2,
+                            "parameters": {
+                                "__IMTCONN__": 3809234
+                            },
+                            "filter": {
+                                "name": "clients",
+                                "conditions": []
+                            },
+                            "mapper": {
+                                "qs": [
+                                    {
+                                        "key": "customItemTypes",
+                                        "value": "[IEAGEMDVPIABX4FV]"
+                                    },
+                                    {
+                                        "key": "fields",
+                                        "value": "[customFields, metadata, description, briefDescription, attachmentCount, superParentIds, space, customItemTypeId, hasAttachments]"
+                                    },
+                                    {
+                                        "key": "project",
+                                        "value": "true"
+                                    }
+                                ],
+                                "url": "/spaces/{{4.id}}/folders",
+                                "method": "GET",
+                                "headers": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ]
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": 0,
+                                    "name": "get clients"
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "qs": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null,
+                                                null,
+                                                null
+                                            ]
+                                        },
+                                        "method": {
+                                            "mode": "chose",
+                                            "label": "GET"
+                                        },
+                                        "headers": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null
+                                            ]
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "wrike2"
+                                            },
+                                            "label": "Make / Wrike (Chris McGovern)"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:wrike2",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "text",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "GET",
+                                                "POST",
+                                                "PUT",
+                                                "PATCH",
+                                                "DELETE"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "text",
+                                                "label": "Key"
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Headers"
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "text",
+                                                "label": "Key"
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String"
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "any",
+                                        "label": "Body"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 5,
+                            "module": "builtin:BasicFeeder",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "array": "{{3.body.data}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1200,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "array": {
+                                            "mode": "edit"
+                                        }
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "mode": "edit",
+                                        "name": "array",
+                                        "spec": [],
+                                        "type": "array",
+                                        "label": "Array"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 7,
+                            "module": "util:SetVariables",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "scope": "roundtrip",
+                                "variables": [
+                                    {
+                                        "name": "google_drive_folder_id",
+                                        "value": "{{map(5.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAGD64G\")}}"
+                                    },
+                                    {
+                                        "name": "approver_email",
+                                        "value": "{{map(5.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZXR5\")}}"
+                                    },
+                                    {
+                                        "name": "ziflow_id",
+                                        "value": "{{map(5.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZXVS\")}}"
+                                    },
+                                    {
+                                        "name": "hubspot_id",
+                                        "value": "{{map(5.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZN76\")}}"
+                                    },
+                                    {
+                                        "name": "brand_guide_url",
+                                        "value": "{{map(5.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAF2QEK\")}}"
+                                    }
+                                ]
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1500,
+                                    "y": 0,
+                                    "name": "set client variables"
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "scope": {
+                                            "label": "One cycle"
+                                        },
+                                        "variables": {
+                                            "items": [
+                                                null,
+                                                null,
+                                                null,
+                                                null,
+                                                null
+                                            ]
+                                        }
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "variables",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Variable name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "any",
+                                                "label": "Variable value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Variables"
+                                    },
+                                    {
+                                        "name": "scope",
+                                        "type": "select",
+                                        "label": "Variable lifetime",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "roundtrip",
+                                                "execution"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "google_drive_folder_id",
+                                        "type": "any",
+                                        "label": "google_drive_folder_id"
+                                    },
+                                    {
+                                        "name": "approver_email",
+                                        "type": "any",
+                                        "label": "approver_email"
+                                    },
+                                    {
+                                        "name": "ziflow_id",
+                                        "type": "any",
+                                        "label": "ziflow_id"
+                                    },
+                                    {
+                                        "name": "hubspot_id",
+                                        "type": "any",
+                                        "label": "hubspot_id"
+                                    },
+                                    {
+                                        "name": "brand_guide_url",
+                                        "type": "any",
+                                        "label": "brand_guide_url"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 1,
+                            "module": "postgres:Query",
+                            "version": 2,
+                            "parameters": {
+                                "account": 4037414,
+                                "continueWhenNoRes": false,
+                                "isToManageDataInSharedTransaction": true
+                            },
+                            "mapper": {
+                                "command": "INSERT INTO projects.clients (\n  wrike_id,\n  title,\n  created_date,\n  updated_date,\n  approver_email,\n  hubspot_id,\n  ziflow_id,\n  owner_id,\n  status,\n  custom_status_id,\n  brand_guide_url,\n  google_drive_folder_id,\n  brief_description,\n  description,\n  active\n) VALUES (\n  '{{5.id}}',\n  '{{5.title}}',\n  '{{5.createdDate}}',\n  '{{5.updatedDate}}',\n  '{{7.approver_email}}',\n  '{{7.hubspot_id[]}}',\n  '{{7.ziflow_id}}',\n  '{{5.project.ownerIds[1]}}',\n  'Active',\n  '{{5.project.customStatusId}}',\n  '{{7.brand_guide_url}}',\n  '{{7.google_drive_folder_id}}',\n  '{{5.briefDescription}}',\n  '{{5.description}}',\n  TRUE\n)\nON CONFLICT (wrike_id) DO UPDATE SET\n  title = EXCLUDED.title,\n  updated_date = EXCLUDED.updated_date,\n  approver_email = EXCLUDED.approver_email,\n  hubspot_id = EXCLUDED.hubspot_id,\n  ziflow_id = EXCLUDED.ziflow_id,\n  owner_id = EXCLUDED.owner_id,\n  status = EXCLUDED.status,\n  custom_status_id = EXCLUDED.custom_status_id,\n  brand_guide_url = EXCLUDED.brand_guide_url,\n  google_drive_folder_id = EXCLUDED.google_drive_folder_id,\n  brief_description = EXCLUDED.brief_description,\n  description = EXCLUDED.description,\n  active = EXCLUDED.active;"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1800,
+                                    "y": 0,
+                                    "name": "add client to neonDB"
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "account": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "postgres"
+                                            },
+                                            "label": "Neon OpsAI-Dash DB"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "account",
+                                        "type": "account:postgres",
+                                        "label": "Connection",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "continueWhenNoRes",
+                                        "type": "boolean",
+                                        "label": "Continue the execution of the route even if the module returns no rows",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "isToManageDataInSharedTransaction",
+                                        "type": "boolean",
+                                        "label": "Manage data within the shared transaction",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "command",
+                                        "type": "text",
+                                        "label": "Command",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 8,
+                            "module": "wrike:universalModule",
+                            "version": 2,
+                            "parameters": {
+                                "__IMTCONN__": 3809234
+                            },
+                            "filter": {
+                                "name": "parent projects",
+                                "conditions": []
+                            },
+                            "mapper": {
+                                "qs": [
+                                    {
+                                        "key": "customItemTypes",
+                                        "value": "[IEAGEMDVPIABXIU5]"
+                                    },
+                                    {
+                                        "key": "fields",
+                                        "value": "[customFields, metadata, description, briefDescription, attachmentCount, superParentIds, space, customItemTypeId, hasAttachments]"
+                                    },
+                                    {
+                                        "key": "project",
+                                        "value": "true"
+                                    }
+                                ],
+                                "url": "/spaces/{{4.id}}/folders",
+                                "method": "GET",
+                                "headers": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ]
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": 300,
+                                    "name": "get parentprojects"
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "qs": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null,
+                                                null,
+                                                null
+                                            ]
+                                        },
+                                        "method": {
+                                            "mode": "chose",
+                                            "label": "GET"
+                                        },
+                                        "headers": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null
+                                            ]
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "wrike2"
+                                            },
+                                            "label": "Make / Wrike (Chris McGovern)"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:wrike2",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "text",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "GET",
+                                                "POST",
+                                                "PUT",
+                                                "PATCH",
+                                                "DELETE"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "text",
+                                                "label": "Key"
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Headers"
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "text",
+                                                "label": "Key"
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String"
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "any",
+                                        "label": "Body"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 10,
+                            "module": "builtin:BasicFeeder",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "array": "{{8.body.data}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1200,
+                                    "y": 300
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "array": {
+                                            "mode": "edit"
+                                        }
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "mode": "edit",
+                                        "name": "array",
+                                        "spec": [],
+                                        "type": "array",
+                                        "label": "Array"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 11,
+                            "module": "util:SetVariables",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "scope": "roundtrip",
+                                "variables": [
+                                    {
+                                        "name": "parent_category",
+                                        "value": "{{map(10.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZXR6\")}}"
+                                    },
+                                    {
+                                        "name": "program_name",
+                                        "value": "{{map(10.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAF2R5G\")}}"
+                                    },
+                                    {
+                                        "name": "co_marketing",
+                                        "value": "{{map(10.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAF2QNP\")}}"
+                                    },
+                                    {
+                                        "name": "approver_email",
+                                        "value": "{{map(10.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZXR5\")}}"
+                                    },
+                                    {
+                                        "name": "ziflow_id",
+                                        "value": "{{map(10.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZXVS\")}}"
+                                    },
+                                    {
+                                        "name": "hs_deal_id",
+                                        "value": "{{map(10.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZN76\")}}"
+                                    },
+                                    {
+                                        "name": "hs_company_id",
+                                        "value": "{{map(10.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAHBOIL\")}}"
+                                    },
+                                    {
+                                        "name": "brand_guide_url",
+                                        "value": "{{map(10.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAF2QEK\")}}"
+                                    },
+                                    {
+                                        "name": "google_drive_folder_id",
+                                        "value": "{{map(10.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAGD64G\")}}"
+                                    },
+                                    {
+                                        "name": "comarketing_required",
+                                        "value": "{{map(10.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAGTTIR\")}}"
+                                    }
+                                ]
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1500,
+                                    "y": 300,
+                                    "name": "set parentproject variables"
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "scope": {
+                                            "label": "One cycle"
+                                        },
+                                        "variables": {
+                                            "items": [
+                                                null,
+                                                null,
+                                                null,
+                                                null,
+                                                null,
+                                                null,
+                                                null,
+                                                null,
+                                                null,
+                                                null
+                                            ]
+                                        }
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "name": "variables",
+                                        "spec": [
+                                            {
+                                                "name": "name",
+                                                "type": "text",
+                                                "label": "Variable name",
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "any",
+                                                "label": "Variable value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Variables"
+                                    },
+                                    {
+                                        "name": "scope",
+                                        "type": "select",
+                                        "label": "Variable lifetime",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "roundtrip",
+                                                "execution"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "parent_category",
+                                        "type": "any",
+                                        "label": "parent_category"
+                                    },
+                                    {
+                                        "name": "program_name",
+                                        "type": "any",
+                                        "label": "program_name"
+                                    },
+                                    {
+                                        "name": "co_marketing",
+                                        "type": "any",
+                                        "label": "co_marketing"
+                                    },
+                                    {
+                                        "name": "approver_email",
+                                        "type": "any",
+                                        "label": "approver_email"
+                                    },
+                                    {
+                                        "name": "ziflow_id",
+                                        "type": "any",
+                                        "label": "ziflow_id"
+                                    },
+                                    {
+                                        "name": "hs_deal_id",
+                                        "type": "any",
+                                        "label": "hs_deal_id"
+                                    },
+                                    {
+                                        "name": "hs_company_id",
+                                        "type": "any",
+                                        "label": "hs_company_id"
+                                    },
+                                    {
+                                        "name": "brand_guide_url",
+                                        "type": "any",
+                                        "label": "brand_guide_url"
+                                    },
+                                    {
+                                        "name": "google_drive_folder_id",
+                                        "type": "any",
+                                        "label": "google_drive_folder_id"
+                                    },
+                                    {
+                                        "name": "comarketing_required",
+                                        "type": "any",
+                                        "label": "comarketing_required"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 12,
+                            "module": "postgres:Query",
+                            "version": 2,
+                            "parameters": {
+                                "account": 4037414,
+                                "continueWhenNoRes": false,
+                                "isToManageDataInSharedTransaction": true
+                            },
+                            "mapper": {
+                                "command": "INSERT INTO projects.parentprojects (\n  wrike_id,\n  title,\n  created_date,\n  updated_date,\n  parent_wrike_id,\n  client_wrike_id,\n  status,\n  custom_status_id,\n  parent_category,\n  program_name,\n  co_marketing,\n  approver_email,\n  owner_id,\n  ziflow_id,\n  hs_deal_id,\n  hs_company_id,\n  permalink,\n  workflow_id,\n  custom_item_type_id,\n  brand_guide_url,\n  google_drive_folder_id,\n  brief_description,\n  description,\n  comarketing_required,\n  has_children,\n  active\n) VALUES (\n  '{{10.id}}',\n  '{{10.title}}',\n  '{{10.createdDate}}',\n  '{{10.updatedDate}}',\n  '{{10.parentIds[1]}}',\n  '{{10.parentIds[1]}}',\n  'Active',\n  '{{10.project.customStatusId}}',\n  '{{11.parent_category}}',\n  '{{11.program_name}}',\n  '{{11.co_marketing}}',\n  '{{11.approver_email}}',\n  '{{10.project.ownerIds[1]}}',\n  '{{11.ziflow_id}}',\n  '{{11.hs_deal_id}}',\n  '{{11.hs_company_id}}',\n  '{{10.permalink}}',\n  '{{10.workflowId}}',\n  '{{10.customItemTypeId}}',\n  '{{11.brand_guide_url}}',\n  '{{11.google_drive_folder_id}}',\n  '{{10.briefDescription}}',\n  '{{10.description}}',\n  '{{11.comarketing_required}}',\n  '{{if(length(10.childIds) > 0; \"true\"; \"false\")}}',\n  'true'\n)\nON CONFLICT (wrike_id) DO UPDATE SET\n  title = EXCLUDED.title,\n  updated_date = EXCLUDED.updated_date,\n  parent_wrike_id = EXCLUDED.parent_wrike_id,\n  client_wrike_id = EXCLUDED.client_wrike_id,\n  status = EXCLUDED.status,\n  custom_status_id = EXCLUDED.custom_status_id,\n  parent_category = EXCLUDED.parent_category,\n  program_name = EXCLUDED.program_name,\n  co_marketing = EXCLUDED.co_marketing,\n  approver_email = EXCLUDED.approver_email,\n  owner_id = EXCLUDED.owner_id,\n  ziflow_id = EXCLUDED.ziflow_id,\n  hs_deal_id = EXCLUDED.hs_deal_id,\n  hs_company_id = EXCLUDED.hs_company_id,\n  permalink = EXCLUDED.permalink,\n  workflow_id = EXCLUDED.workflow_id,\n  custom_item_type_id = EXCLUDED.custom_item_type_id,\n  brand_guide_url = EXCLUDED.brand_guide_url,\n  google_drive_folder_id = EXCLUDED.google_drive_folder_id,\n  brief_description = EXCLUDED.brief_description,\n  description = EXCLUDED.description,\n  comarketing_required = EXCLUDED.comarketing_required,\n  has_children = EXCLUDED.has_children,\n  active = EXCLUDED.active;"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1800,
+                                    "y": 300,
+                                    "name": "add parentprojects to neonDB"
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "account": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "postgres"
+                                            },
+                                            "label": "Neon OpsAI-Dash DB"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "account",
+                                        "type": "account:postgres",
+                                        "label": "Connection",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "continueWhenNoRes",
+                                        "type": "boolean",
+                                        "label": "Continue the execution of the route even if the module returns no rows",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "isToManageDataInSharedTransaction",
+                                        "type": "boolean",
+                                        "label": "Manage data within the shared transaction",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "command",
+                                        "type": "text",
+                                        "label": "Command",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 13,
+                            "module": "wrike:universalModule",
+                            "version": 2,
+                            "parameters": {
+                                "__IMTCONN__": 3809234
+                            },
+                            "filter": {
+                                "name": "child projects",
+                                "conditions": []
+                            },
+                            "mapper": {
+                                "qs": [
+                                    {
+                                        "key": "customItemTypes",
+                                        "value": "[IEAGEMDVPIABXIVA]"
+                                    },
+                                    {
+                                        "key": "fields",
+                                        "value": "[customFields, metadata, description, briefDescription, attachmentCount, superParentIds, space, customItemTypeId, hasAttachments]"
+                                    },
+                                    {
+                                        "key": "project",
+                                        "value": "true"
+                                    }
+                                ],
+                                "url": "/spaces/{{4.id}}/folders",
+                                "method": "GET",
+                                "headers": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    }
+                                ]
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": 900,
+                                    "name": "get childprojects"
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "qs": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null,
+                                                null,
+                                                null
+                                            ]
+                                        },
+                                        "method": {
+                                            "mode": "chose",
+                                            "label": "GET"
+                                        },
+                                        "headers": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null
+                                            ]
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "wrike2"
+                                            },
+                                            "label": "Make / Wrike (Chris McGovern)"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:wrike2",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "url",
+                                        "type": "text",
+                                        "label": "URL",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "method",
+                                        "type": "select",
+                                        "label": "Method",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "GET",
+                                                "POST",
+                                                "PUT",
+                                                "PATCH",
+                                                "DELETE"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "headers",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "text",
+                                                "label": "Key"
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Headers"
+                                    },
+                                    {
+                                        "name": "qs",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "text",
+                                                "label": "Key"
+                                            },
+                                            {
+                                                "name": "value",
+                                                "type": "text",
+                                                "label": "Value"
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Query String"
+                                    },
+                                    {
+                                        "name": "body",
+                                        "type": "any",
+                                        "label": "Body"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 14,
+                            "module": "builtin:BasicFeeder",
+                            "version": 1,
+                            "parameters": {},
+                            "mapper": {
+                                "array": "{{13.body.data}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1200,
+                                    "y": 900
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "array": {
+                                            "mode": "edit"
+                                        }
+                                    }
+                                },
+                                "expect": [
+                                    {
+                                        "mode": "edit",
+                                        "name": "array",
+                                        "spec": [],
+                                        "type": "array",
+                                        "label": "Array"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 19,
+                            "module": "builtin:BasicRouter",
+                            "version": 1,
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 1500,
+                                    "y": 900
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 18,
+                                            "module": "wrike:universalModule",
+                                            "version": 2,
+                                            "parameters": {
+                                                "__IMTCONN__": 3809234
+                                            },
+                                            "mapper": {
+                                                "qs": [
+                                                    {
+                                                        "key": "fields",
+                                                        "value": "[customFields,recurrent,attachmentCount,effortAllocation,billingType,hasAttachments,attachmentCount,parentIds,superParentIds,responsibleIds,description,briefDescription,superTaskIds,subTaskIds,dependencyIds,customItemTypeId]"
+                                                    },
+                                                    {
+                                                        "key": "descendants",
+                                                        "value": "true"
+                                                    },
+                                                    {
+                                                        "key": "subTasks",
+                                                        "value": "true"
+                                                    }
+                                                ],
+                                                "url": "/folders/{{14.id}}/tasks",
+                                                "method": "GET",
+                                                "headers": [
+                                                    {
+                                                        "key": "Content-Type",
+                                                        "value": "application/json"
+                                                    }
+                                                ]
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1800,
+                                                    "y": 750,
+                                                    "name": "get deliverables and tasks"
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "qs": {
+                                                            "mode": "chose",
+                                                            "items": [
+                                                                null,
+                                                                null,
+                                                                null
+                                                            ]
+                                                        },
+                                                        "method": {
+                                                            "mode": "chose",
+                                                            "label": "GET"
+                                                        },
+                                                        "headers": {
+                                                            "mode": "chose",
+                                                            "items": [
+                                                                null
+                                                            ]
+                                                        }
+                                                    },
+                                                    "parameters": {
+                                                        "__IMTCONN__": {
+                                                            "data": {
+                                                                "scoped": "true",
+                                                                "connection": "wrike2"
+                                                            },
+                                                            "label": "Make / Wrike (Chris McGovern)"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account:wrike2",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "url",
+                                                        "type": "text",
+                                                        "label": "URL",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "method",
+                                                        "type": "select",
+                                                        "label": "Method",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "GET",
+                                                                "POST",
+                                                                "PUT",
+                                                                "PATCH",
+                                                                "DELETE"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "name": "headers",
+                                                        "spec": [
+                                                            {
+                                                                "name": "key",
+                                                                "type": "text",
+                                                                "label": "Key"
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "type": "text",
+                                                                "label": "Value"
+                                                            }
+                                                        ],
+                                                        "type": "array",
+                                                        "label": "Headers"
+                                                    },
+                                                    {
+                                                        "name": "qs",
+                                                        "spec": [
+                                                            {
+                                                                "name": "key",
+                                                                "type": "text",
+                                                                "label": "Key"
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "type": "text",
+                                                                "label": "Value"
+                                                            }
+                                                        ],
+                                                        "type": "array",
+                                                        "label": "Query String"
+                                                    },
+                                                    {
+                                                        "name": "body",
+                                                        "type": "any",
+                                                        "label": "Body"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 21,
+                                            "module": "builtin:BasicFeeder",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "mapper": {
+                                                "array": "{{18.body.data}}"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2100,
+                                                    "y": 750
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "array": {
+                                                            "mode": "edit"
+                                                        }
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "mode": "edit",
+                                                        "name": "array",
+                                                        "spec": [],
+                                                        "type": "array",
+                                                        "label": "Array"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 20,
+                                            "module": "util:SetVariables",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "mapper": {
+                                                "scope": "roundtrip",
+                                                "variables": [
+                                                    {
+                                                        "name": "deliverable_type",
+                                                        "value": "{{map(21.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFX3LA\")}}"
+                                                    },
+                                                    {
+                                                        "name": "deliverable_category",
+                                                        "value": "{{map(21.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAGOJU2\")}}"
+                                                    },
+                                                    {
+                                                        "name": "proof_id",
+                                                        "value": "{{map(21.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZN7T\")}}"
+                                                    },
+                                                    {
+                                                        "name": "proof_url",
+                                                        "value": "{{map(21.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZQQX\")}}"
+                                                    },
+                                                    {
+                                                        "name": "proof_version",
+                                                        "value": "{{map(21.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZN7V\")}}"
+                                                    },
+                                                    {
+                                                        "name": "proof_status",
+                                                        "value": "{{map(21.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZN6T\")}}"
+                                                    },
+                                                    {
+                                                        "name": "proof_error",
+                                                        "value": "{{map(21.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZ3KF\")}}"
+                                                    },
+                                                    {
+                                                        "name": "company",
+                                                        "value": "{{map(21.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAHIQEQ\")}}"
+                                                    },
+                                                    {
+                                                        "name": "drive_id",
+                                                        "value": "{{map(21.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAGD64G\")}}"
+                                                    },
+                                                    {
+                                                        "name": "publish_owner",
+                                                        "value": "{{map(21.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAGNW55\")}}"
+                                                    },
+                                                    {
+                                                        "name": "target_pub_date",
+                                                        "value": "{{map(21.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAHD4AP\")}}"
+                                                    },
+                                                    {
+                                                        "name": "original_date",
+                                                        "value": "{{map(21.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAHES5L\")}}"
+                                                    }
+                                                ]
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2400,
+                                                    "y": 750,
+                                                    "name": "set deliverable variables"
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "scope": {
+                                                            "label": "One cycle"
+                                                        },
+                                                        "variables": {
+                                                            "items": [
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "variables",
+                                                        "spec": [
+                                                            {
+                                                                "name": "name",
+                                                                "type": "text",
+                                                                "label": "Variable name",
+                                                                "required": true
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "type": "any",
+                                                                "label": "Variable value"
+                                                            }
+                                                        ],
+                                                        "type": "array",
+                                                        "label": "Variables"
+                                                    },
+                                                    {
+                                                        "name": "scope",
+                                                        "type": "select",
+                                                        "label": "Variable lifetime",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "roundtrip",
+                                                                "execution"
+                                                            ]
+                                                        }
+                                                    }
+                                                ],
+                                                "interface": [
+                                                    {
+                                                        "name": "deliverable_type",
+                                                        "type": "any",
+                                                        "label": "deliverable_type"
+                                                    },
+                                                    {
+                                                        "name": "deliverable_category",
+                                                        "type": "any",
+                                                        "label": "deliverable_category"
+                                                    },
+                                                    {
+                                                        "name": "proof_id",
+                                                        "type": "any",
+                                                        "label": "proof_id"
+                                                    },
+                                                    {
+                                                        "name": "proof_url",
+                                                        "type": "any",
+                                                        "label": "proof_url"
+                                                    },
+                                                    {
+                                                        "name": "proof_version",
+                                                        "type": "any",
+                                                        "label": "proof_version"
+                                                    },
+                                                    {
+                                                        "name": "proof_status",
+                                                        "type": "any",
+                                                        "label": "proof_status"
+                                                    },
+                                                    {
+                                                        "name": "proof_error",
+                                                        "type": "any",
+                                                        "label": "proof_error"
+                                                    },
+                                                    {
+                                                        "name": "company",
+                                                        "type": "any",
+                                                        "label": "company"
+                                                    },
+                                                    {
+                                                        "name": "drive_id",
+                                                        "type": "any",
+                                                        "label": "drive_id"
+                                                    },
+                                                    {
+                                                        "name": "publish_owner",
+                                                        "type": "any",
+                                                        "label": "publish_owner"
+                                                    },
+                                                    {
+                                                        "name": "target_pub_date",
+                                                        "type": "any",
+                                                        "label": "target_pub_date"
+                                                    },
+                                                    {
+                                                        "name": "original_date",
+                                                        "type": "any",
+                                                        "label": "original_date"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 23,
+                                            "module": "util:Switcher",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "mapper": {
+                                                "input": "{{20.proof_version}}",
+                                                "casesTable": [
+                                                    {
+                                                        "output": "0",
+                                                        "pattern": "^$"
+                                                    }
+                                                ],
+                                                "elseOutput": "{{20.proof_version}}",
+                                                "useRegExpMatch": true
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2700,
+                                                    "y": 750,
+                                                    "name": "proofVersion"
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "casesTable": {
+                                                            "mode": "chose",
+                                                            "items": [
+                                                                null
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "input",
+                                                        "type": "text",
+                                                        "label": "Input"
+                                                    },
+                                                    {
+                                                        "name": "useRegExpMatch",
+                                                        "type": "boolean",
+                                                        "label": "Use regular expressions to match",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "casesTable",
+                                                        "spec": [
+                                                            {
+                                                                "name": "pattern",
+                                                                "type": "text",
+                                                                "label": "Pattern"
+                                                            },
+                                                            {
+                                                                "name": "output",
+                                                                "type": "any",
+                                                                "label": "Output"
+                                                            }
+                                                        ],
+                                                        "type": "array",
+                                                        "label": "Cases",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "elseOutput",
+                                                        "type": "any",
+                                                        "label": "Else"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 24,
+                                            "module": "util:Switcher",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "mapper": {
+                                                "input": "{{21.effortAllocation.totalEffort}}",
+                                                "casesTable": [
+                                                    {
+                                                        "output": "0",
+                                                        "pattern": "^$|^null$|^undefined$"
+                                                    },
+                                                    {
+                                                        "output": "{{21.effortAllocation.totalEffort}}",
+                                                        "pattern": "{{21.effortAllocation.totalEffort}}"
+                                                    }
+                                                ],
+                                                "elseOutput": "0",
+                                                "useRegExpMatch": true
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 3000,
+                                                    "y": 750,
+                                                    "name": "totalEffort"
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "casesTable": {
+                                                            "mode": "chose",
+                                                            "items": [
+                                                                null,
+                                                                null
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "input",
+                                                        "type": "text",
+                                                        "label": "Input"
+                                                    },
+                                                    {
+                                                        "name": "useRegExpMatch",
+                                                        "type": "boolean",
+                                                        "label": "Use regular expressions to match",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "casesTable",
+                                                        "spec": [
+                                                            {
+                                                                "name": "pattern",
+                                                                "type": "text",
+                                                                "label": "Pattern"
+                                                            },
+                                                            {
+                                                                "name": "output",
+                                                                "type": "any",
+                                                                "label": "Output"
+                                                            }
+                                                        ],
+                                                        "type": "array",
+                                                        "label": "Cases",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "elseOutput",
+                                                        "type": "any",
+                                                        "label": "Else"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 29,
+                                            "module": "builtin:BasicRouter",
+                                            "version": 1,
+                                            "mapper": null,
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 3300,
+                                                    "y": 750
+                                                }
+                                            },
+                                            "routes": [
+                                                {
+                                                    "flow": [
+                                                        {
+                                                            "id": 28,
+                                                            "module": "postgres:Query",
+                                                            "version": 2,
+                                                            "parameters": {
+                                                                "account": 4037414,
+                                                                "continueWhenNoRes": false,
+                                                                "isToManageDataInSharedTransaction": true
+                                                            },
+                                                            "filter": {
+                                                                "name": "not deliverable",
+                                                                "conditions": [
+                                                                    [
+                                                                        {
+                                                                            "a": "{{21.customItemTypeId}}",
+                                                                            "b": "IEAGEMDVPIABWGFL",
+                                                                            "o": "text:notequal"
+                                                                        }
+                                                                    ],
+                                                                    [
+                                                                        {
+                                                                            "a": "{{21.customItemTypeId}}",
+                                                                            "o": "notexist"
+                                                                        }
+                                                                    ]
+                                                                ]
+                                                            },
+                                                                                                        "mapper": {
+                                                "command": "WITH up AS (\n  UPDATE projects.tasks\n     SET title               = '{{replace(21.title; \"'\"; )}}',\n         brief_description   = '{{replace(21.briefDescription; \"'\"; )}}',\n         description         = '{{replace(21.description; \"'\"; )}}',\n         status              = '{{21.status}}',\n         custom_status_id    = '{{21.customStatusId}}',\n         updated_date        = '{{21.updatedDate}}',\n         parent_id           = '{{21.parentIds[1]}}',\n         super_parent_id     = '{{21.superParentIds[1]}}',\n         super_task_id       = '{{21.superTaskIds[1]}}',\n         owner_id            = '{{21.responsibleIds[1]}}',\n         due_date            = '{{21.dates.due}}',\n         scope               = '{{21.scope}}',\n         deliverable_type    = '{{20.deliverable_type[]}}',\n         deliverable_category= '{{20.deliverable_category}}',\n         proof_id            = '{{20.proof_id}}',\n         proof_url           = '{{20.proof_url}}',\n         proof_version       = {{23.output}},\n         proof_status        = '{{20.proof_status}}',\n         proof_error         = '{{20.proof_error}}',\n         drive_id            = '{{20.drive_id}}',\n         publish_owner       = '{{20.publish_owner}}',\n         total_effort        = {{24.output}},\n         effort_mode         = '{{21.effortAllocation.mode}}',\n         dependency_ids      = '{{if((21.dependencyIds != \"\"\"\") + \"\"\"\"; \"{\" + 21.dependencyIds + \"}\"; \"{}\")}}',\n         has_attachments     = '{{21.hasAttachments}}',\n         importance          = '{{21.importance}}',\n         permalink           = '{{21.permalink}}',\n         priority            = '{{21.priority}}',\n         billing_type        = '{{21.billingType}}',\n         custom_item_type_id = '{{21.customItemTypeId}}',\n         active              = 'true'\n   WHERE wrike_id = '{{21.id}}'\n   RETURNING wrike_id\n)\nINSERT INTO projects.tasks (\n    wrike_id, title, brief_description, description,\n    status, custom_status_id, created_date, updated_date,\n    parent_id, super_parent_id, super_task_id, owner_id,\n    due_date, scope, deliverable_type, deliverable_category,\n    proof_id, proof_url, proof_version, proof_status,\n    proof_error, drive_id, publish_owner, total_effort,\n    effort_mode, dependency_ids, has_attachments, importance,\n    permalink, priority, billing_type, custom_item_type_id,\n    active\n) SELECT\n    '{{21.id}}',\n    '{{replace(21.title; \"'\"; )}}',\n    '{{replace(21.briefDescription; \"'\"; )}}',\n    '{{replace(21.description; \"'\"; )}}',\n    '{{21.status}}',\n    '{{21.customStatusId}}',\n    '{{21.createdDate}}',\n    '{{21.updatedDate}}',\n    '{{21.parentIds[1]}}',\n    '{{21.superParentIds[1]}}',\n    '{{21.superTaskIds[1]}}',\n    '{{21.responsibleIds[1]}}',\n    '{{21.dates.due}}',\n    '{{21.scope}}',\n    '{{20.deliverable_type[]}}',\n    '{{20.deliverable_category}}',\n    '{{20.proof_id}}',\n    '{{20.proof_url}}',\n    {{23.output}},\n    '{{20.proof_status}}',\n    '{{20.proof_error}}',\n    '{{20.drive_id}}',\n    '{{20.publish_owner}}',\n    {{24.output}},\n    '{{21.effortAllocation.mode}}',\n    '{{if((21.dependencyIds != \"\"\"\") + \"\"\"\"; \"{\" + 21.dependencyIds + \"}\"; \"{}\")}}',\n    '{{21.hasAttachments}}',\n    '{{21.importance}}',\n    '{{21.permalink}}',\n    '{{21.priority}}',\n    '{{21.billingType}}',\n    '{{21.customItemTypeId}}',\n    'true'\nWHERE NOT EXISTS (SELECT 1 FROM up);"
+                                            },
+                                                            "metadata": {
+                                                                "designer": {
+                                                                    "x": 3600,
+                                                                    "y": 600,
+                                                                    "name": "add tasks to neonDB"
+                                                                },
+                                                                "restore": {
+                                                                    "parameters": {
+                                                                        "account": {
+                                                                            "data": {
+                                                                                "scoped": "true",
+                                                                                "connection": "postgres"
+                                                                            },
+                                                                            "label": "Neon OpsAI-Dash DB"
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "parameters": [
+                                                                    {
+                                                                        "name": "account",
+                                                                        "type": "account:postgres",
+                                                                        "label": "Connection",
+                                                                        "required": true
+                                                                    },
+                                                                    {
+                                                                        "name": "continueWhenNoRes",
+                                                                        "type": "boolean",
+                                                                        "label": "Continue the execution of the route even if the module returns no rows",
+                                                                        "required": true
+                                                                    },
+                                                                    {
+                                                                        "name": "isToManageDataInSharedTransaction",
+                                                                        "type": "boolean",
+                                                                        "label": "Manage data within the shared transaction",
+                                                                        "required": true
+                                                                    }
+                                                                ],
+                                                                "expect": [
+                                                                    {
+                                                                        "name": "command",
+                                                                        "type": "text",
+                                                                        "label": "Command",
+                                                                        "required": true
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "onerror": [
+                                                                {
+                                                                    "id": 32,
+                                                                    "module": "builtin:Ignore",
+                                                                    "version": 1,
+                                                                    "metadata": {
+                                                                        "designer": {
+                                                                            "x": 3900,
+                                                                            "y": 600
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "flow": [
+                                                        {
+                                                            "id": 22,
+                                                            "module": "postgres:Query",
+                                                            "version": 2,
+                                                            "parameters": {
+                                                                "account": 4037414,
+                                                                "continueWhenNoRes": false,
+                                                                "isToManageDataInSharedTransaction": true
+                                                            },
+                                                            "filter": {
+                                                                "name": "deliverable",
+                                                                "conditions": [
+                                                                    [
+                                                                        {
+                                                                            "a": "{{21.customItemTypeId}}",
+                                                                            "b": "IEAGEMDVPIABWGFL",
+                                                                            "o": "text:equal"
+                                                                        }
+                                                                    ]
+                                                                ]
+                                                            },
+                                                            "mapper": {
+                                                                "command": "INSERT INTO projects.deliverables (\n    wrike_id,\n    title,\n    brief_description,\n    description,\n    status,\n    custom_status_id,\n    created_date,\n    updated_date,\n    parent_id,\n    super_parent_id,\n    super_task_id,\n    owner_id,\n    start_date,\n    due_date,\n    scope,\n    deliverable_type,\n    deliverable_category,\n    proof_id,\n    proof_url,\n    proof_version,\n    proof_status,\n    proof_error,\n    drive_id,\n    publish_owner,\n    total_effort,\n    effort_mode,\n    subtask_ids,\n    dependency_ids,\n    has_attachments,\n    importance,\n    permalink,\n    priority,\n    billing_type,\n    custom_item_type_id,\n    active\n) VALUES (\n    '{{21.id}}',\n    '{{replace(toString(21.title; \"'\"; ))}}',\n    '{{replace(21.briefDescription; \"'\"; )}}',\n    '{{replace(21.description; \"'\"; )}}',\n    '{{21.status}}',\n    '{{21.customStatusId}}',\n    '{{21.createdDate}}',\n    '{{21.updatedDate}}',\n    '{{21.parentIds[1]}}',\n    '{{21.superParentIds[1]}}',\n    '{{21.superTaskIds[1]}}',\n    '{{21.responsibleIds[1]}}',\n    '{{21.dates.start}}',\n    '{{21.dates.due}}',\n    '{{21.scope}}',\n    '{{20.deliverable_type[]}}',\n    '{{20.deliverable_category}}',\n    '{{20.proof_id}}',\n    '{{20.proof_url}}',\n    {{23.output}},\n    '{{20.proof_status}}',\n    '{{20.proof_error}}',\n    '{{20.drive_id}}',\n    '{{20.publish_owner}}',\n    {{24.output}},\n    '{{21.effortAllocation.mode}}',\n    '{{if((21.subTaskIds != \"\"\"\") + \"\"\"\"; \"{\" + 21.subTaskIds + \"}\"; \"{}\")}}',\n    '{{if((21.dependencyIds != \"\"\"\") + \"\"\"\"; \"{\" + 21.dependencyIds + \"}\"; \"{}\")}}',\n    '{{21.hasAttachments}}',\n    '{{21.importance}}',\n    '{{21.permalink}}',\n    '{{21.priority}}',\n    '{{21.billingType}}',\n    '{{21.customItemTypeId}}',\n    'true'\n)\nON CONFLICT (wrike_id) DO UPDATE SET\n    title = EXCLUDED.title,\n    brief_description = EXCLUDED.brief_description,\n    description = EXCLUDED.description,\n    status = EXCLUDED.status,\n    custom_status_id = EXCLUDED.custom_status_id,\n    updated_date = EXCLUDED.updated_date,\n    parent_id = EXCLUDED.parent_id,\n    super_parent_id = EXCLUDED.super_parent_id,\n    super_task_id = EXCLUDED.super_task_id,\n    owner_id = EXCLUDED.owner_id,\n    start_date = EXCLUDED.start_date,\n    due_date = EXCLUDED.due_date,\n    scope = EXCLUDED.scope,\n    deliverable_type = EXCLUDED.deliverable_type,\n    deliverable_category = EXCLUDED.deliverable_category,\n    proof_id = EXCLUDED.proof_id,\n    proof_url = EXCLUDED.proof_url,\n    proof_version = EXCLUDED.proof_version,\n    proof_status = EXCLUDED.proof_status,\n    proof_error = EXCLUDED.proof_error,\n    drive_id = EXCLUDED.drive_id,\n    publish_owner = EXCLUDED.publish_owner,\n    total_effort = EXCLUDED.total_effort,\n    effort_mode = EXCLUDED.effort_mode,\n    subtask_ids = EXCLUDED.subtask_ids,\n    dependency_ids = EXCLUDED.dependency_ids,\n    has_attachments = EXCLUDED.has_attachments,\n    importance = EXCLUDED.importance,\n    permalink = EXCLUDED.permalink,\n    priority = EXCLUDED.priority,\n    billing_type = EXCLUDED.billing_type,\n    custom_item_type_id = EXCLUDED.custom_item_type_id,\n    active = EXCLUDED.active;"
+                                                            },
+                                                            "metadata": {
+                                                                "designer": {
+                                                                    "x": 3600,
+                                                                    "y": 900,
+                                                                    "name": "add deliverables to neonDB"
+                                                                },
+                                                                "restore": {
+                                                                    "parameters": {
+                                                                        "account": {
+                                                                            "data": {
+                                                                                "scoped": "true",
+                                                                                "connection": "postgres"
+                                                                            },
+                                                                            "label": "Neon OpsAI-Dash DB"
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "parameters": [
+                                                                    {
+                                                                        "name": "account",
+                                                                        "type": "account:postgres",
+                                                                        "label": "Connection",
+                                                                        "required": true
+                                                                    },
+                                                                    {
+                                                                        "name": "continueWhenNoRes",
+                                                                        "type": "boolean",
+                                                                        "label": "Continue the execution of the route even if the module returns no rows",
+                                                                        "required": true
+                                                                    },
+                                                                    {
+                                                                        "name": "isToManageDataInSharedTransaction",
+                                                                        "type": "boolean",
+                                                                        "label": "Manage data within the shared transaction",
+                                                                        "required": true
+                                                                    }
+                                                                ],
+                                                                "expect": [
+                                                                    {
+                                                                        "name": "command",
+                                                                        "type": "text",
+                                                                        "label": "Command",
+                                                                        "required": true
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "onerror": [
+                                                                {
+                                                                    "id": 26,
+                                                                    "module": "builtin:Ignore",
+                                                                    "version": 1,
+                                                                    "metadata": {
+                                                                        "designer": {
+                                                                            "x": 3900,
+                                                                            "y": 900
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 15,
+                                            "module": "util:SetVariables",
+                                            "version": 1,
+                                            "parameters": {},
+                                            "mapper": {
+                                                "scope": "roundtrip",
+                                                "variables": [
+                                                    {
+                                                        "name": "child_type",
+                                                        "value": "{{map(14.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZXSB\")}}"
+                                                    },
+                                                    {
+                                                        "name": "program_name",
+                                                        "value": "{{map(14.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAF2R5G\")}}"
+                                                    },
+                                                    {
+                                                        "name": "co_marketing",
+                                                        "value": "{{map(14.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAF2QNP\")}}"
+                                                    },
+                                                    {
+                                                        "name": "approver_email",
+                                                        "value": "{{map(14.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZXR5\")}}"
+                                                    },
+                                                    {
+                                                        "name": "ziflow_id",
+                                                        "value": "{{map(14.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZXVS\")}}"
+                                                    },
+                                                    {
+                                                        "name": "hs_deal_id",
+                                                        "value": "{{map(14.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAFZN76\")}}"
+                                                    },
+                                                    {
+                                                        "name": "hs_company_id",
+                                                        "value": "{{map(14.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAHBOIL\")}}"
+                                                    },
+                                                    {
+                                                        "name": "brand_guide_url",
+                                                        "value": "{{map(14.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAF2QEK\")}}"
+                                                    },
+                                                    {
+                                                        "name": "google_drive_folder_id",
+                                                        "value": "{{map(14.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAGD64G\")}}"
+                                                    },
+                                                    {
+                                                        "name": "comarketing_required",
+                                                        "value": "{{map(14.customFields; \"value\"; \"id\"; \"IEAGEMDVJUAGTTIR\")}}"
+                                                    }
+                                                ]
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1800,
+                                                    "y": 1200,
+                                                    "name": "set childproject variables"
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "scope": {
+                                                            "label": "One cycle"
+                                                        },
+                                                        "variables": {
+                                                            "items": [
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null,
+                                                                null
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "expect": [
+                                                    {
+                                                        "name": "variables",
+                                                        "spec": [
+                                                            {
+                                                                "name": "name",
+                                                                "type": "text",
+                                                                "label": "Variable name",
+                                                                "required": true
+                                                            },
+                                                            {
+                                                                "name": "value",
+                                                                "type": "any",
+                                                                "label": "Variable value"
+                                                            }
+                                                        ],
+                                                        "type": "array",
+                                                        "label": "Variables"
+                                                    },
+                                                    {
+                                                        "name": "scope",
+                                                        "type": "select",
+                                                        "label": "Variable lifetime",
+                                                        "required": true,
+                                                        "validate": {
+                                                            "enum": [
+                                                                "roundtrip",
+                                                                "execution"
+                                                            ]
+                                                        }
+                                                    }
+                                                ],
+                                                "interface": [
+                                                    {
+                                                        "name": "child_type",
+                                                        "type": "any",
+                                                        "label": "child_type"
+                                                    },
+                                                    {
+                                                        "name": "program_name",
+                                                        "type": "any",
+                                                        "label": "program_name"
+                                                    },
+                                                    {
+                                                        "name": "co_marketing",
+                                                        "type": "any",
+                                                        "label": "co_marketing"
+                                                    },
+                                                    {
+                                                        "name": "approver_email",
+                                                        "type": "any",
+                                                        "label": "approver_email"
+                                                    },
+                                                    {
+                                                        "name": "ziflow_id",
+                                                        "type": "any",
+                                                        "label": "ziflow_id"
+                                                    },
+                                                    {
+                                                        "name": "hs_deal_id",
+                                                        "type": "any",
+                                                        "label": "hs_deal_id"
+                                                    },
+                                                    {
+                                                        "name": "hs_company_id",
+                                                        "type": "any",
+                                                        "label": "hs_company_id"
+                                                    },
+                                                    {
+                                                        "name": "brand_guide_url",
+                                                        "type": "any",
+                                                        "label": "brand_guide_url"
+                                                    },
+                                                    {
+                                                        "name": "google_drive_folder_id",
+                                                        "type": "any",
+                                                        "label": "google_drive_folder_id"
+                                                    },
+                                                    {
+                                                        "name": "comarketing_required",
+                                                        "type": "any",
+                                                        "label": "comarketing_required"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 16,
+                                            "module": "postgres:Query",
+                                            "version": 2,
+                                            "parameters": {
+                                                "account": 4037414,
+                                                "continueWhenNoRes": false,
+                                                "isToManageDataInSharedTransaction": true
+                                            },
+                                            "mapper": {
+                                                "command": "INSERT INTO projects.childprojects (\n    wrike_id,\n    title,\n    brief_description,\n    description,\n    created_date,\n    updated_date,\n    parent_id,\n    status,\n    child_type,\n    program_name,\n    co_marketing,\n    approver_email,\n    owner_id,\n    ziflow_id,\n    hs_deal_id,\n    hs_company_id,\n    permalink,\n    workflow_id,\n    custom_item_type_id,\n    brand_guide,\n    google_drive_folder_id,\n    comarketing_required,\n    active\n) VALUES (\n    '{{14.id}}',\n    '{{14.title}}',\n    '{{stripHTML(14.briefDescription)}}',\n    '{{14.description}}',\n    '{{14.createdDate}}',\n    '{{14.updatedDate}}',\n    '{{14.parentIds[]}}',\n    '{{14.project.customStatusId}}',\n    '{{15.child_type[]}}',\n    '{{15.program_name[]}}',\n    '{{15.co_marketing[]}}',\n    '{{15.approver_email[]}}',\n    '{{14.project.ownerIds[]}}',\n    '{{15.ziflow_id[]}}',\n    '{{15.hs_deal_id}}',\n    '{{15.hs_company_id}}',\n    '{{14.permalink}}',\n    '{{14.workflowId}}',\n    '{{14.customItemTypeId}}',\n    '{{15.brand_guide_url[]}}',\n    '{{15.google_drive_folder_id[]}}',\n    '{{15.comarketing_required[]}}',\n    'true'\n)\nON CONFLICT (wrike_id) DO UPDATE SET\n    title = EXCLUDED.title,\n    brief_description = EXCLUDED.brief_description,\n    description = EXCLUDED.description,\n    updated_date = EXCLUDED.updated_date,\n    parent_id = EXCLUDED.parent_id,\n    status = EXCLUDED.status,\n    child_type = EXCLUDED.child_type,    program_name = EXCLUDED.program_name,\n    co_marketing = EXCLUDED.co_marketing,\n    approver_email = EXCLUDED.approver_email,\n    owner_id = EXCLUDED.owner_id,\n    ziflow_id = EXCLUDED.ziflow_id,\n    hs_deal_id = EXCLUDED.hs_deal_id,\n    hs_company_id = EXCLUDED.hs_company_id,\n    permalink = EXCLUDED.permalink,\n    workflow_id = EXCLUDED.workflow_id,\n    custom_item_type_id = EXCLUDED.custom_item_type_id,\n    brand_guide = EXCLUDED.brand_guide,\n    google_drive_folder_id = EXCLUDED.google_drive_folder_id,\n    comarketing_required = EXCLUDED.comarketing_required,\n    active = EXCLUDED.active;"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 2100,
+                                                    "y": 1200,
+                                                    "name": "add childprojects to neonDB"
+                                                },
+                                                "restore": {
+                                                    "parameters": {
+                                                        "account": {
+                                                            "data": {
+                                                                "scoped": "true",
+                                                                "connection": "postgres"
+                                                            },
+                                                            "label": "Neon OpsAI-Dash DB"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "account",
+                                                        "type": "account:postgres",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "continueWhenNoRes",
+                                                        "type": "boolean",
+                                                        "label": "Continue the execution of the route even if the module returns no rows",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "isToManageDataInSharedTransaction",
+                                                        "type": "boolean",
+                                                        "label": "Manage data within the shared transaction",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "command",
+                                                        "type": "text",
+                                                        "label": "Command",
+                                                        "required": true
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": false,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "us1.make.com",
+        "notes": []
+    }
+}
