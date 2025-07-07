@@ -1,12 +1,23 @@
+#!/usr/bin/env python3
+"""
+Full-featured API Sync Monitor for Vercel deployment
+Includes all sync operations, static file serving, and real-time updates
+"""
+
 import os
+import json
 import logging
-from flask import Flask, render_template, redirect, session, request, jsonify
+import threading
+import queue
+import subprocess
+from datetime import datetime, timedelta
+from collections import deque, defaultdict
+from flask import Flask, render_template, redirect, session, request, jsonify, Response, send_from_directory
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
 from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
-from datetime import datetime
 import urllib.parse
 
 # Configure logging
@@ -22,7 +33,7 @@ app.config['GOOGLE_CLIENT_ID'] = os.environ.get('GOOGLE_CLIENT_ID')
 app.config['GOOGLE_CLIENT_SECRET'] = os.environ.get('GOOGLE_CLIENT_SECRET')
 app.config['ALLOWED_DOMAIN'] = 'preshmarketingsolutions.com'
 
-# Google OAuth Scopes - using full URIs to avoid scope mismatch
+# Google OAuth Scopes
 GOOGLE_SCOPES = [
     "openid",
     "https://www.googleapis.com/auth/userinfo.email",
@@ -33,7 +44,7 @@ GOOGLE_SCOPES = [
 if os.environ.get('FLASK_ENV') == 'development':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
-# Simple session storage using cookies (no Redis for debugging)
+# Session configuration
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
@@ -45,6 +56,105 @@ login_manager.login_view = 'login'
 
 # Initialize CSRF Protection
 csrf = CSRFProtect(app)
+
+# Global storage for sync operations
+logs = deque(maxlen=2000)
+active_syncs = {}
+sync_history = deque(maxlen=100)
+metrics = {
+    'jobs_today': 0,
+    'jobs_completed': 0,
+    'jobs_failed': 0,
+    'total_records_synced': 0,
+    'avg_duration': 0,
+    'durations': deque(maxlen=50)
+}
+event_queue = queue.Queue()
+
+# Available sync scripts
+SYNC_SCRIPTS = {
+    'hubspot_companies': {
+        'name': 'HubSpot Companies',
+        'script': 'hubspot_companies_sync.py',
+        'description': 'Sync companies from HubSpot to database',
+        'color': 'orange',
+        'category': 'HubSpot',
+        'estimated_duration': 120,
+        'object_type': 'companies'
+    },
+    'hubspot_contacts': {
+        'name': 'HubSpot Contacts',
+        'script': 'hubspot_contacts_sync.py',
+        'description': 'Sync contacts from HubSpot to database',
+        'color': 'amber',
+        'category': 'HubSpot',
+        'estimated_duration': 180,
+        'object_type': 'contacts'
+    },
+    'hubspot_deals': {
+        'name': 'HubSpot Deals',
+        'script': 'hubspot_deals_sync.py',
+        'description': 'Sync deals from HubSpot to database',
+        'color': 'emerald',
+        'category': 'HubSpot',
+        'estimated_duration': 240,
+        'object_type': 'deals'
+    },
+    'hubspot_line_items': {
+        'name': 'HubSpot Line Items',
+        'script': 'hubspot_line_items_sync.py',
+        'description': 'Sync line items from HubSpot to database',
+        'color': 'purple',
+        'category': 'HubSpot',
+        'estimated_duration': 120,
+        'object_type': 'line_items'
+    },
+    'clients': {
+        'name': 'Wrike Clients',
+        'script': 'clients_sync.py',
+        'description': 'Sync client folders from Wrike',
+        'color': 'blue',
+        'category': 'Wrike',
+        'estimated_duration': 60,
+        'object_type': 'folders'
+    },
+    'parent_projects': {
+        'name': 'Parent Projects',
+        'script': 'parentprojects_sync.py',
+        'description': 'Sync parent project folders from Wrike',
+        'color': 'green',
+        'category': 'Wrike',
+        'estimated_duration': 90,
+        'object_type': 'projects'
+    },
+    'child_projects': {
+        'name': 'Child Projects',
+        'script': 'childprojects_sync.py',
+        'description': 'Sync child project folders from Wrike',
+        'color': 'purple',
+        'category': 'Wrike',
+        'estimated_duration': 150,
+        'object_type': 'projects'
+    },
+    'tasks': {
+        'name': 'Wrike Tasks',
+        'script': 'tasks_sync.py',
+        'description': 'Sync tasks from Wrike',
+        'color': 'teal',
+        'category': 'Wrike',
+        'estimated_duration': 300,
+        'object_type': 'tasks'
+    },
+    'deliverables': {
+        'name': 'Wrike Deliverables',
+        'script': 'deliverables_sync.py',
+        'description': 'Sync deliverables from Wrike',
+        'color': 'red',
+        'category': 'Wrike',
+        'estimated_duration': 180,
+        'object_type': 'deliverables'
+    }
+}
 
 # User class
 class User(UserMixin):
@@ -82,6 +192,199 @@ def get_oauth_config():
         }
     }, redirect_uri
 
+# Sync utility functions
+def add_log(level, message, sync_type=None, object_count=None, user_email=None):
+    """Add a log entry with timestamp and broadcast to SSE clients."""
+    log_entry = {
+        'timestamp': datetime.now().isoformat(),
+        'level': level,
+        'message': message,
+        'sync_type': sync_type,
+        'object_count': object_count,
+        'user': user_email
+    }
+    logs.append(log_entry)
+    
+    update_metrics_from_log(log_entry)
+    
+    event_data = {
+        'type': 'log',
+        'data': log_entry
+    }
+    try:
+        event_queue.put_nowait(json.dumps(event_data))
+    except queue.Full:
+        pass
+
+def update_metrics_from_log(log_entry):
+    """Update metrics based on log entry."""
+    if log_entry['level'] == 'SUCCESS':
+        metrics['jobs_completed'] += 1
+        if log_entry.get('object_count'):
+            metrics['total_records_synced'] += log_entry['object_count']
+    elif log_entry['level'] == 'ERROR':
+        metrics['jobs_failed'] += 1
+    
+    metrics['jobs_today'] = metrics['jobs_completed'] + metrics['jobs_failed']
+
+def broadcast_status_update(sync_type, status):
+    """Broadcast sync status update to SSE clients."""
+    event_data = {
+        'type': 'status',
+        'sync_type': sync_type,
+        'data': status
+    }
+    try:
+        event_queue.put_nowait(json.dumps(event_data))
+    except queue.Full:
+        pass
+
+def broadcast_metrics_update():
+    """Broadcast metrics update to SSE clients."""
+    event_data = {
+        'type': 'metrics',
+        'data': get_current_metrics()
+    }
+    try:
+        event_queue.put_nowait(json.dumps(event_data))
+    except queue.Full:
+        pass
+
+def get_current_metrics():
+    """Get current metrics including system info."""
+    try:
+        import psutil
+        system_metrics = {
+            'cpu_percent': psutil.cpu_percent(interval=1),
+            'memory_percent': psutil.virtual_memory().percent,
+            'disk_percent': psutil.disk_usage('/').percent
+        }
+    except ImportError:
+        system_metrics = {
+            'cpu_percent': 0,
+            'memory_percent': 0,
+            'disk_percent': 0
+        }
+    
+    return {
+        'active_jobs': len([s for s in active_syncs.values() if s.get('status') == 'running']),
+        'completed_today': metrics['jobs_completed'],
+        'failed_today': metrics['jobs_failed'],
+        'total_records_synced': metrics['total_records_synced'],
+        'system': system_metrics
+    }
+
+def run_sync_script(sync_type, limit=None, user_email=None):
+    """Run a sync script with user tracking."""
+    script_info = SYNC_SCRIPTS.get(sync_type)
+    if not script_info:
+        add_log('ERROR', f'Unknown sync type: {sync_type}', user_email=user_email)
+        return
+
+    script_name = script_info['script']
+    
+    if not os.path.exists(script_name):
+        add_log('ERROR', f'Script not found: {script_name}', sync_type, user_email=user_email)
+        return
+    
+    start_time = datetime.now()
+    add_log('INFO', f'Starting {script_info["name"]} sync...', sync_type, user_email=user_email)
+    
+    try:
+        cmd = ['python', '-u', script_name]
+        if limit:
+            cmd.append(str(limit))
+        
+        active_syncs[sync_type] = {
+            'started': start_time,
+            'script': script_name,
+            'status': 'running',
+            'estimated_completion': start_time + timedelta(seconds=script_info['estimated_duration']),
+            'object_type': script_info['object_type'],
+            'records_processed': 0,
+            'user': user_email
+        }
+        
+        broadcast_status_update(sync_type, active_syncs[sync_type])
+        
+        env = os.environ.copy()
+        env['PYTHONUNBUFFERED'] = '1'
+        
+        process = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=0,
+            universal_newlines=True,
+            env=env
+        )
+        
+        records_processed = 0
+        
+        while True:
+            poll_result = process.poll()
+            output_line = process.stdout.readline()
+            
+            if output_line:
+                line = output_line.strip()
+                level = 'INFO'
+                
+                if ' - ERROR - ' in line or 'ERROR' in line.upper():
+                    level = 'ERROR'
+                elif ' - WARNING - ' in line or 'WARNING' in line.upper():
+                    level = 'WARNING'
+                elif 'synced' in line.lower() or 'completed' in line.lower():
+                    level = 'SUCCESS'
+                
+                add_log(level, line, sync_type, user_email=user_email)
+            
+            if poll_result is not None and not output_line:
+                break
+        
+        return_code = process.poll()
+        end_time = datetime.now()
+        duration = (end_time - start_time).total_seconds()
+        
+        sync_record = {
+            'sync_type': sync_type,
+            'started': start_time.isoformat(),
+            'completed': end_time.isoformat(),
+            'duration': duration,
+            'status': 'completed' if return_code == 0 else 'failed',
+            'records_processed': records_processed,
+            'return_code': return_code,
+            'user': user_email
+        }
+        sync_history.append(sync_record)
+        
+        metrics['durations'].append(duration)
+        if len(metrics['durations']) > 0:
+            metrics['avg_duration'] = sum(metrics['durations']) / len(metrics['durations'])
+        
+        if return_code == 0:
+            add_log('SUCCESS', f'{script_info["name"]} sync completed successfully!', 
+                sync_type, records_processed, user_email)
+            active_syncs[sync_type]['status'] = 'completed'
+        else:
+            add_log('ERROR', f'{script_info["name"]} sync failed with return code {return_code}', 
+                sync_type, user_email=user_email)
+            active_syncs[sync_type]['status'] = 'failed'
+            
+    except Exception as e:
+        add_log('ERROR', f'Error running {script_info["name"]} sync: {str(e)}', sync_type, user_email=user_email)
+        active_syncs[sync_type]['status'] = 'failed'
+    
+    finally:
+        broadcast_status_update(sync_type, active_syncs[sync_type])
+        broadcast_metrics_update()
+
+# Static file serving
+@app.route('/static/<path:filename>')
+def static_files(filename):
+    """Serve static files"""
+    return send_from_directory('static', filename)
+
 # Routes
 @app.route('/')
 def root():
@@ -111,7 +414,7 @@ def login():
         
         authorization_url, state = flow.authorization_url(
             access_type='offline',
-            prompt='consent',  # Force fresh consent screen
+            prompt='consent',
             hd=app.config['ALLOWED_DOMAIN']
         )
         
@@ -131,20 +434,17 @@ def callback():
     try:
         logger.info(f"OAuth callback received with args: {request.args}")
         
-        # Check for OAuth errors
         if 'error' in request.args:
             error_msg = request.args.get('error')
             logger.error(f"OAuth error: {error_msg}")
             return render_template('error.html', 
                 error=f'Authentication failed: {error_msg}'), 401
         
-        # Check for required parameters
         if 'code' not in request.args:
             logger.error("Missing authorization code in callback")
             return render_template('error.html', 
                 error='Missing authorization code'), 400
         
-        # Get state from session
         session_state = session.get('oauth_state')
         request_state = request.args.get('state')
         
@@ -158,11 +458,9 @@ def callback():
             return render_template('error.html', 
                 error='Invalid state parameter'), 401
         
-        # Get stored redirect URI
         redirect_uri = session.get('redirect_uri', 'https://presh-api-dash.vercel.app/callback')
         oauth_config, _ = get_oauth_config()
         
-        # Create flow with state
         flow = Flow.from_client_config(
             oauth_config,
             scopes=GOOGLE_SCOPES,
@@ -170,18 +468,14 @@ def callback():
             state=session_state
         )
         
-        # Manually construct the authorization response URL
-        # This is more reliable than using request.url in serverless environments
         auth_response = f"{redirect_uri}?{request.query_string.decode()}"
         logger.info(f"Constructed authorization response: {auth_response}")
         
-        # Fetch token
         flow.fetch_token(authorization_response=auth_response)
         
         credentials = flow.credentials
         request_session = google_requests.Request()
         
-        # Verify the token
         id_info = id_token.verify_oauth2_token(
             credentials.id_token,
             request_session,
@@ -190,7 +484,6 @@ def callback():
         
         logger.info(f"Token verified for user: {id_info.get('email')}")
         
-        # Check domain restriction
         email = id_info.get('email')
         if not email:
             logger.error("No email in token")
@@ -202,7 +495,6 @@ def callback():
             return render_template('error.html', 
                 error=f'Access restricted to @{app.config["ALLOWED_DOMAIN"]} emails only'), 403
         
-        # Create user
         user = User(
             user_id=id_info['sub'],
             email=email,
@@ -210,7 +502,6 @@ def callback():
             picture=id_info.get('picture')
         )
         
-        # Store user data in session
         session['user_data'] = {
             'id': user.id,
             'email': user.email,
@@ -218,7 +509,6 @@ def callback():
             'picture': user.picture
         }
         
-        # Clean up OAuth session data
         session.pop('oauth_state', None)
         session.pop('redirect_uri', None)
         
@@ -236,12 +526,7 @@ def callback():
 @login_required
 def dashboard():
     return render_template('index_secure.html', 
-        sync_scripts={'notice': {
-            'name': 'Important Notice',
-            'description': 'Sync operations are not available on Vercel',
-            'color': 'yellow',
-            'category': 'System'
-        }},
+        sync_scripts=SYNC_SCRIPTS,
         user=current_user,
         deployment_type='vercel')
 
@@ -256,11 +541,130 @@ def logout():
 
 @app.route('/clear-session')
 def clear_session():
-    """Clear stale OAuth sessions - useful after OAuth config changes"""
     session.clear()
     logger.info("Session cleared")
     return redirect('/login')
 
+# API Routes
+@app.route('/api/sync/<sync_type>')
+@login_required
+def start_sync(sync_type):
+    if sync_type not in SYNC_SCRIPTS:
+        return jsonify({'error': f'Unknown sync type: {sync_type}'}), 400
+    
+    if sync_type in active_syncs and active_syncs[sync_type].get('status') == 'running':
+        return jsonify({'error': f'{SYNC_SCRIPTS[sync_type]["name"]} sync is already running'}), 400
+    
+    limit = request.args.get('limit', type=int)
+    
+    logger.info(f"Sync initiated by {current_user.email}: {sync_type}")
+    
+    thread = threading.Thread(target=run_sync_script, args=(sync_type, limit, current_user.email))
+    thread.daemon = True
+    thread.start()
+    
+    return jsonify({
+        'message': f'{SYNC_SCRIPTS[sync_type]["name"]} sync started',
+        'sync_type': sync_type,
+        'estimated_duration': SYNC_SCRIPTS[sync_type]['estimated_duration'],
+        'initiated_by': current_user.email
+    })
+
+@app.route('/api/status')
+@login_required
+def get_status():
+    status_dict = {}
+    for sync_type, sync_info in active_syncs.items():
+        status_dict[sync_type] = {
+            'status': sync_info.get('status', 'unknown'),
+            'started': sync_info.get('started', '').isoformat() if sync_info.get('started') else '',
+            'estimated_completion': sync_info.get('estimated_completion', '').isoformat() if sync_info.get('estimated_completion') else '',
+            'records_processed': sync_info.get('records_processed', 0),
+            'user': sync_info.get('user', 'unknown')
+        }
+    
+    return jsonify(status_dict)
+
+@app.route('/api/metrics')
+@login_required
+def get_metrics():
+    return jsonify(get_current_metrics())
+
+@app.route('/api/logs')
+@login_required
+def get_logs():
+    filter_level = request.args.get('level')
+    filter_sync_type = request.args.get('sync_type')
+    
+    filtered_logs = []
+    for log in logs:
+        if filter_level and log['level'] != filter_level:
+            continue
+        if filter_sync_type and log.get('sync_type') != filter_sync_type:
+            continue
+        filtered_logs.append(log)
+    
+    return jsonify(filtered_logs)
+
+@app.route('/api/clear-logs', methods=['POST'])
+@login_required
+def clear_logs():
+    logs.clear()
+    add_log('INFO', f'Logs cleared by {current_user.email}', user_email=current_user.email)
+    return jsonify({'message': 'Logs cleared successfully'})
+
+@app.route('/api/history')
+@login_required
+def get_sync_history():
+    return jsonify(list(sync_history))
+
+@app.route('/events')
+@login_required
+def events():
+    def event_stream():
+        # Send initial data
+        initial_data = {
+            'type': 'init',
+            'logs': list(logs)[-50:],  # Last 50 logs
+            'status': get_status(),
+            'metrics': get_current_metrics()
+        }
+        yield f"data: {json.dumps(initial_data)}\n\n"
+        
+        # Stream real-time updates
+        while True:
+            try:
+                data = event_queue.get(timeout=30)
+                yield f"data: {data}\n\n"
+            except queue.Empty:
+                # Send keepalive ping
+                ping_data = {
+                    'type': 'ping',
+                    'metrics': get_current_metrics()
+                }
+                yield f"data: {json.dumps(ping_data)}\n\n"
+    
+    response = Response(event_stream(), content_type='text/event-stream')
+    response.headers['Cache-Control'] = 'no-cache'
+    response.headers['Connection'] = 'keep-alive'
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = 'Cache-Control'
+    return response
+
+def get_status():
+    """Get current sync status"""
+    status_dict = {}
+    for sync_type, sync_info in active_syncs.items():
+        status_dict[sync_type] = {
+            'status': sync_info.get('status', 'unknown'),
+            'started': sync_info.get('started', '').isoformat() if sync_info.get('started') else '',
+            'estimated_completion': sync_info.get('estimated_completion', '').isoformat() if sync_info.get('estimated_completion') else '',
+            'records_processed': sync_info.get('records_processed', 0),
+            'user': sync_info.get('user', 'unknown')
+        }
+    return status_dict
+
+# Health and debug endpoints
 @app.route('/health')
 def health():
     client_id = app.config.get('GOOGLE_CLIENT_ID')
@@ -269,7 +673,7 @@ def health():
     return jsonify({
         'status': 'healthy',
         'timestamp': datetime.now().isoformat(),
-        'deployment': 'vercel-simple',
+        'deployment': 'vercel-full',
         'oauth_configured': bool(client_id and client_secret),
         'config_status': {
             'client_id_set': bool(client_id),
@@ -287,55 +691,16 @@ def test():
     
     return jsonify({
         'status': 'working',
-        'message': 'Flask app is running on Vercel (simplified)',
-        'oauth_configured': bool(client_id and client_secret)
-    })
-
-@app.route('/debug/oauth')
-def debug_oauth():
-    """Debug endpoint to check OAuth configuration"""
-    client_id = app.config.get('GOOGLE_CLIENT_ID')
-    client_secret = app.config.get('GOOGLE_CLIENT_SECRET')
-    
-    return jsonify({
-        'oauth_config': {
-            'client_id_set': bool(client_id),
-            'client_secret_set': bool(client_secret),
-            'client_id_preview': client_id[:20] + '...' if client_id else None,
-            'redirect_uri': 'https://presh-api-dash.vercel.app/callback',
-            'allowed_domain': app.config.get('ALLOWED_DOMAIN'),
-            'secret_key_set': bool(app.config.get('SECRET_KEY')),
-            'flask_env': app.config.get('FLASK_ENV'),
-            'scopes': GOOGLE_SCOPES
-        },
-        'session_info': {
-            'has_oauth_state': 'oauth_state' in session,
-            'has_redirect_uri': 'redirect_uri' in session,
-            'session_keys': list(session.keys())
-        },
-        'environment_variables': {
-            'GOOGLE_CLIENT_ID': 'SET' if os.environ.get('GOOGLE_CLIENT_ID') else 'NOT SET',
-            'GOOGLE_CLIENT_SECRET': 'SET' if os.environ.get('GOOGLE_CLIENT_SECRET') else 'NOT SET',
-            'SECRET_KEY': 'SET' if os.environ.get('SECRET_KEY') else 'NOT SET',
-            'FLASK_ENV': os.environ.get('FLASK_ENV', 'NOT SET')
-        }
-    })
-
-@app.route('/debug/session-test')
-def debug_session_test():
-    """Debug endpoint to test session functionality"""
-    return jsonify({
-        'message': 'Session test endpoint',
-        'session_data': {
-            'session_keys': list(session.keys()),
-            'user_authenticated': current_user.is_authenticated if current_user else False,
-            'user_data': session.get('user_data', 'No user data in session')
-        },
-        'browser_info': {
-            'user_agent': request.headers.get('User-Agent', 'Unknown'),
-            'referer': request.headers.get('Referer', 'No referer'),
-            'origin': request.headers.get('Origin', 'No origin')
-        }
+        'message': 'Full-featured Flask app is running on Vercel',
+        'oauth_configured': bool(client_id and client_secret),
+        'sync_scripts_available': len(SYNC_SCRIPTS),
+        'features': [
+            'OAuth authentication',
+            'Sync operations',
+            'Real-time updates',
+            'Static file serving',
+            'API endpoints'
+        ]
     })
 
 # Error handlers
@@ -349,4 +714,5 @@ def internal_error(error):
     return render_template('error.html', error='Internal server error'), 500
 
 # For Vercel deployment
-# The app variable must be named 'app' for Vercel to recognize it 
+if __name__ == '__main__':
+    app.run(debug=True) 

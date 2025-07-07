@@ -16,8 +16,16 @@
       "dest": "/static/$1"
     },
     {
+      "src": "/events",
+      "dest": "/app_vercel_simple.py"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/app_vercel_simple.py"
+    },
+    {
       "src": "/(.*)",
-      "dest": "app_vercel_simple.py"
+      "dest": "/app_vercel_simple.py"
     }
   ],
   "env": {
