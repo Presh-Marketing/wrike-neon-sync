@@ -26,6 +26,13 @@ app.config['GOOGLE_CLIENT_ID'] = os.environ.get('GOOGLE_CLIENT_ID')
 app.config['GOOGLE_CLIENT_SECRET'] = os.environ.get('GOOGLE_CLIENT_SECRET')
 app.config['ALLOWED_DOMAIN'] = 'preshmarketingsolutions.com'
 
+# Google OAuth Scopes - using full URIs to avoid scope mismatch
+GOOGLE_SCOPES = [
+    "openid",
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/userinfo.profile",
+]
+
 # Disable OAUTHLIB's HTTPS requirement in development
 if os.environ.get('FLASK_ENV') == 'development':
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
@@ -110,7 +117,7 @@ def get_google_oauth_flow():
                 "redirect_uris": [redirect_uri]
             }
         },
-        scopes=['openid', 'email', 'profile'],
+        scopes=GOOGLE_SCOPES,
         redirect_uri=redirect_uri
     )
 
@@ -204,6 +211,13 @@ def logout():
     logout_user()
     session.clear()
     logger.info(f"User logged out: {email}")
+    return redirect(url_for('login'))
+
+@app.route('/clear-session')
+def clear_session():
+    """Clear stale OAuth sessions - useful after OAuth config changes"""
+    session.clear()
+    logger.info("Session cleared")
     return redirect(url_for('login'))
 
 # Main routes
