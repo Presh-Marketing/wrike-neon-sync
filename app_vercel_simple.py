@@ -101,7 +101,7 @@ def login():
         authorization_url, state = flow.authorization_url(
             access_type='offline',
             include_granted_scopes='true',
-            prompt='select_account',
+            prompt='consent',  # Force fresh consent screen
             hd=app.config['ALLOWED_DOMAIN']
         )
         
