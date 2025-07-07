@@ -2,6 +2,7 @@ import os
 import logging
 from flask import Flask, render_template, redirect, session, request, jsonify
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from flask_wtf.csrf import CSRFProtect
 from google.auth.transport import requests as google_requests
 from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
@@ -41,6 +42,9 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+# Initialize CSRF Protection
+csrf = CSRFProtect(app)
 
 # User class
 class User(UserMixin):
@@ -301,7 +305,8 @@ def debug_oauth():
             'redirect_uri': 'https://presh-api-dash.vercel.app/callback',
             'allowed_domain': app.config.get('ALLOWED_DOMAIN'),
             'secret_key_set': bool(app.config.get('SECRET_KEY')),
-            'flask_env': app.config.get('FLASK_ENV')
+            'flask_env': app.config.get('FLASK_ENV'),
+            'scopes': GOOGLE_SCOPES
         },
         'session_info': {
             'has_oauth_state': 'oauth_state' in session,
@@ -313,6 +318,23 @@ def debug_oauth():
             'GOOGLE_CLIENT_SECRET': 'SET' if os.environ.get('GOOGLE_CLIENT_SECRET') else 'NOT SET',
             'SECRET_KEY': 'SET' if os.environ.get('SECRET_KEY') else 'NOT SET',
             'FLASK_ENV': os.environ.get('FLASK_ENV', 'NOT SET')
+        }
+    })
+
+@app.route('/debug/session-test')
+def debug_session_test():
+    """Debug endpoint to test session functionality"""
+    return jsonify({
+        'message': 'Session test endpoint',
+        'session_data': {
+            'session_keys': list(session.keys()),
+            'user_authenticated': current_user.is_authenticated if current_user else False,
+            'user_data': session.get('user_data', 'No user data in session')
+        },
+        'browser_info': {
+            'user_agent': request.headers.get('User-Agent', 'Unknown'),
+            'referer': request.headers.get('Referer', 'No referer'),
+            'origin': request.headers.get('Origin', 'No origin')
         }
     })
 

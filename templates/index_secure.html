@@ -37,7 +37,7 @@
 </head>
 <body class="bg-gray-50">
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() if csrf_token else '' }}">
     
     <!-- Top Navigation Bar -->
     <nav class="bg-white shadow-md">
@@ -221,48 +221,119 @@
     <script src="{{ url_for('static', filename='js/dashboard-utils.js') }}"></script>
     <script>
         // CSRF token handling
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+        const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
         
-        // EventSource for real-time updates
-        const eventSource = new EventSource('/events');
+        // EventSource for real-time updates with error handling
+        let eventSource;
         let activeJobs = {};
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 5;
+        let reconnectDelay = 1000; // Start with 1 second delay
 
-        eventSource.onmessage = function(event) {
-            const data = JSON.parse(event.data);
-            
-            if (data.type === 'init') {
-                // Initialize dashboard with current state
-                updateMetrics(data.metrics);
-                data.logs.forEach(log => addLogEntry(log));
-                Object.entries(data.status).forEach(([syncType, status]) => {
-                    updateSyncStatus(syncType, status);
-                });
-            } else if (data.type === 'log') {
-                addLogEntry(data.data);
-            } else if (data.type === 'status') {
-                updateSyncStatus(data.sync_type, data.data);
-            } else if (data.type === 'metrics') {
-                updateMetrics(data.data);
-            } else if (data.type === 'ping') {
-                updateMetrics(data.metrics);
+        function initializeEventSource() {
+            try {
+                // Close existing connection if any
+                if (eventSource) {
+                    eventSource.close();
+                }
+
+                console.log('Initializing EventSource connection...');
+                eventSource = new EventSource('/events');
+
+                eventSource.onopen = function(event) {
+                    console.log('EventSource connection opened');
+                    reconnectAttempts = 0;
+                    reconnectDelay = 1000;
+                };
+
+                eventSource.onmessage = function(event) {
+                    try {
+                        const data = JSON.parse(event.data);
+                        
+                        if (data.type === 'init') {
+                            // Initialize dashboard with current state
+                            updateMetrics(data.metrics);
+                            data.logs.forEach(log => addLogEntry(log));
+                            Object.entries(data.status).forEach(([syncType, status]) => {
+                                updateSyncStatus(syncType, status);
+                            });
+                        } else if (data.type === 'log') {
+                            addLogEntry(data.data);
+                        } else if (data.type === 'status') {
+                            updateSyncStatus(data.sync_type, data.data);
+                        } else if (data.type === 'metrics') {
+                            updateMetrics(data.data);
+                        } else if (data.type === 'ping') {
+                            updateMetrics(data.metrics);
+                        }
+                    } catch (error) {
+                        console.error('Error processing EventSource message:', error);
+                    }
+                };
+
+                eventSource.onerror = function(error) {
+                    console.error('EventSource error:', error);
+                    
+                    if (eventSource.readyState === EventSource.CLOSED) {
+                        console.log('EventSource connection closed');
+                        attemptReconnect();
+                    } else {
+                        console.log('EventSource connection error, but still open');
+                    }
+                };
+
+            } catch (error) {
+                console.error('Error initializing EventSource:', error);
+                attemptReconnect();
             }
-        };
+        }
 
-        eventSource.onerror = function(error) {
-            console.error('EventSource failed:', error);
-            showNotification('Connection lost. Please refresh the page.', 'error');
-        };
+        function attemptReconnect() {
+            if (reconnectAttempts < maxReconnectAttempts) {
+                reconnectAttempts++;
+                console.log(`Attempting to reconnect EventSource (attempt ${reconnectAttempts}/${maxReconnectAttempts}) in ${reconnectDelay}ms...`);
+                
+                setTimeout(() => {
+                    initializeEventSource();
+                }, reconnectDelay);
+                
+                // Exponential backoff
+                reconnectDelay = Math.min(reconnectDelay * 2, 30000); // Cap at 30 seconds
+            } else {
+                console.error('Max reconnection attempts reached. EventSource connection failed.');
+                showNotification('Real-time updates unavailable. Please refresh the page.', 'error');
+            }
+        }
+
+        // Initialize EventSource after a short delay to avoid conflicts with OAuth redirect
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait a bit to ensure the page is fully loaded and any OAuth redirect is complete
+            setTimeout(() => {
+                initializeEventSource();
+            }, 500);
+        });
+
+        // Clean up EventSource on page unload
+        window.addEventListener('beforeunload', function() {
+            if (eventSource) {
+                eventSource.close();
+            }
+        });
 
         function startSync(syncType) {
             const button = document.getElementById(`btn-${syncType}`);
             button.disabled = true;
             button.textContent = 'Starting...';
             
+            const headers = {};
+            if (csrfToken) {
+                headers['X-CSRFToken'] = csrfToken;
+            }
+            
             fetch(`/api/sync/${syncType}`, {
                 method: 'GET',
-                headers: {
-                    'X-CSRFToken': csrfToken
-                }
+                headers: headers
             })
             .then(response => response.json())
             .then(data => {
@@ -393,12 +464,16 @@
 
         function clearLogs() {
             if (confirm('Are you sure you want to clear all logs?')) {
+                const clearHeaders = {
+                    'Content-Type': 'application/json'
+                };
+                if (csrfToken) {
+                    clearHeaders['X-CSRFToken'] = csrfToken;
+                }
+                
                 fetch('/api/clear-logs', {
                     method: 'POST',
-                    headers: {
-                        'X-CSRFToken': csrfToken,
-                        'Content-Type': 'application/json'
-                    }
+                    headers: clearHeaders
                 })
                 .then(response => response.json())
                 .then(data => {
